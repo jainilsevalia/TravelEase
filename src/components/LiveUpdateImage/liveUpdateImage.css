@@ -1,0 +1,22 @@
+.live_update_pic {
+	border-radius: 50%;
+	height: 80px;
+	width: 80px;
+	margin-left: 15px;
+	margin-right: 15px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	background: -webkit-linear-gradient(
+		left top,
+		rgb(247, 8, 56) 0%,
+		rgb(233, 156, 41) 100%
+	);
+	border-radius: 1000px;
+	padding: 3px;
+	cursor: pointer;
+}
+@media only screen and (max-width: 750px) {
+	.model img {
+		width: 95%;
+	}
+}

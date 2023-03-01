@@ -1,0 +1,178 @@
+.feed_container {
+	display: grid;
+	grid-template-columns: 7% 1fr 20%;
+	overflow: hidden;
+	background-color: #f5f5f5;
+}
+
+.feed_container-live_update_div {
+	height: 100%;
+	overflow: hidden;
+}
+.feed_container-post_div {
+	height: 100vh;
+	width: auto;
+	overflow: scroll;
+	row-gap: 20px;
+	padding-inline: 12px;
+	padding-block: 20px;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	overflow-x: hidden;
+}
+.feed_container-post_div::-webkit-scrollbar {
+	display: none;
+}
+
+.live_update_div_in_home {
+	height: 100vh;
+	align-items: center;
+	overflow: scroll;
+	padding-block: 12px;
+
+	/* margin-left: 10px; */
+}
+.live_update_div_in_home::-webkit-scrollbar {
+	display: none;
+}
+.live_update_and_user_name {
+	display: flex;
+	align-items: center;
+	/* box-shadow: rgba(55, 84, 170, 0.5) 0 5px 20px; */
+	border-radius: 20px;
+	max-width: fit-content;
+	/* margin: 15px; */
+}
+.userName_in_live_update {
+	font-family: "Poppins", sans-serif;
+	font-size: 10px;
+	font-weight: bold;
+	color: rgba(12, 28, 70, 1);
+}
+.feed_container-post_div {
+	/* margin-left: 20px; */
+	/* margin-right: 20px; */
+	/* display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	overflow-x: hidden; */
+}
+.live_update_in_feed {
+	margin-left: 10px;
+}
+
+@media only screen and (max-width: 610px) {
+	/* .live_update_div_in_home {
+		overflow-x: hidden;
+	} */
+}
+
+/* @media only screen and (min-width: 1000px) and (max-width: 1800px) {
+	.feed_container-post_div {
+		grid-template-columns: 1fr 1fr;
+	}
+} */
+@media only screen and (max-width: 856px) {
+	.feed_container {
+		display: grid;
+		grid-template-columns: 16% 1fr;
+		overflow: hidden;
+		background-color: #f5f5f5;
+	}
+}
+/* @media only screen and (min-width: 856px) and (max-width: 1000px) {
+	.feed_container {
+		grid-template-columns: 7% 1fr;
+	}
+} */
+@media only screen and (max-width: 1000px) {
+	.live_update_and_user_name {
+		display: flex;
+		align-items: baseline;
+		/* box-shadow: rgba(55, 84, 170, 0.5) 0 5px 20px; */
+		border-radius: 20px;
+		/* margin: 15px; */
+	}
+
+	.live_update_div_in_home {
+		overflow-x: hidden;
+	}
+
+	.live_update_and_user_name {
+		box-shadow: rgba(255, 255, 255, 0.5) 0 5px 20px;
+	}
+	.userName_in_live_update {
+		display: none;
+	}
+	.feed_container-live_update_div {
+		overflow-x: hidden;
+	}
+}
+@media only screen and (max-width: 1700px) {
+	.live_update_and_user_name {
+		flex-direction: column;
+	}
+	.userName_in_live_update {
+		margin-bottom: 15px;
+	}
+}
+@media only screen and (min-width: 1000px) and (max-width: 1300px) {
+	/* .live_update_in_feed .live_update_pic {
+		height: 65px;
+		width: 65px;
+	} */
+	.userName_in_live_update {
+		display: none;
+	}
+}
+.recent_expense_in_feed {
+	height: 100px;
+	width: 100px;
+}
+.feed_container-latest_trip_div {
+	/* background-color: yellow; */
+	height: max-content;
+	width: auto;
+	background-color: rgb(255, 255, 255);
+	margin-right: 20px;
+	margin-top: 20px;
+	border-radius: 15px;
+	padding: 10px;
+	/* display: none; */
+}
+.feed_container-latest_trip_div-heading {
+	font-size: 20px;
+	font-weight: bolder;
+	padding: 0 10px 10px 10px;
+}
+.feed_container-latest_trip_div-button {
+	display: flex;
+	justify-content: center;
+	margin-top: 20px;
+	position: relative;
+}
+
+@media only screen and (max-width: 1200px) {
+	.feed_container-latest_trip_div {
+		display: none;
+	}
+	.feed_container-post_div {
+		grid-template-columns: 1fr 1fr;
+	}
+	.feed_container {
+		grid-template-columns: 16% 1fr;
+	}
+}
+@media only screen and (max-width: 940px) {
+	.feed_container-post_div {
+		grid-template-columns: 1fr;
+	}
+}
+@media only screen and (max-width: 666px) {
+	.live_update_in_feed .live_update_pic {
+		height: 50px;
+		width: 50px;
+		/* height: 65px;
+		width: 65px; */
+		margin: 10px 10px 10px 0;
+	}
+}
