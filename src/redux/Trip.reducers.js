@@ -17,16 +17,16 @@ const initialState = [
       "Aliquam quis sed dapibus augue gravida. Integer bibendum tempor nisi, vitae luctus tortor tincidunt porttitor. Nullam purus massa, lobortis eu lacus commodo, condimentum ultrices tellus.",
     tripDate: "07:19 - 15 Mar 2021",
     initialBudget: 700,
-    totalExpense: 450,
+    totalExpense: 900,
   },
   {
     tripId: 3,
     tripName: "McNabs Island",
     tripDescription:
       "Suspendisse dapibus nisi fermentum tincidunt varius. Nulla dictum bibendum pretium. Nulla placerat sem porttitor dui lobortis aliquet nec at massa. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Maecenas et ipsum ante. Sed eleifend diam elit, sed faucibus nibh imperdiet ac.",
-    tripDate: "12:50 - 06 Sup 2020",
+    tripDate: "12:50 - 06 Sep 2020",
     initialBudget: 800,
-    totalExpense: 450,
+    totalExpense: 650,
   },
   {
     tripId: 4,
@@ -35,7 +35,7 @@ const initialState = [
       "Fermentum aliquet nec at massa. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Maecenas et ipsum ante. Sed eleifend diam elit, sed faucibus nibh imperdiet ac.",
     tripDate: "09:60 - 06 Dec 2021",
     initialBudget: 800,
-    totalExpense: 450,
+    totalExpense: 650,
   },
   {
     tripId: 5,
@@ -44,7 +44,7 @@ const initialState = [
       "Nulla placerat sem porttitor dui lobortis aliquet nec at massa. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Maecenas et ipsum ante. Sed eleifend diam elit, sed faucibus nibh imperdiet ac.",
     tripDate: "09:15 - 06 Jan 2021",
     initialBudget: 800,
-    totalExpense: 450,
+    totalExpense: 780,
   },
   {
     tripId: 6,
@@ -53,7 +53,7 @@ const initialState = [
       "Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Maecenas et ipsum ante. Sed eleifend diam elit, sed faucibus nibh imperdiet ac.",
     tripDate: "08:50 - 07 Aug 2004",
     initialBudget: 800,
-    totalExpense: 450,
+    totalExpense: 650,
   },
   {
     tripId: 7,
@@ -62,7 +62,7 @@ const initialState = [
       "Suspendisse dapibus nisi fermentum tincidunt varius. Nulla dictum bibendum pretium. Nulla placerat sem porttitor dui lobortis aliquet nec at massa. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Maecenas et ipsum ante. Sed eleifend diam elit, sed faucibus nibh imperdiet ac.",
     tripDate: "07:40 - 05 Feb 2002",
     initialBudget: 800,
-    totalExpense: 450,
+    totalExpense: 505,
   },
   {
     tripId: 8,
@@ -71,7 +71,7 @@ const initialState = [
       "Maecenas et ipsum ante. Sed eleifend diam elit, sed faucibus nibh imperdiet ac.Maecenas et ipsum ante. Sed eleifend diam elit, sed faucibus nibh imperdiet ac.Maecenas et ipsum ante. Sed eleifend diam elit, sed faucibus nibh imperdiet ac.",
     tripDate: "06:12 - 08 Mar 2020",
     initialBudget: 800,
-    totalExpense: 450,
+    totalExpense: 800,
   },
   {
     tripId: 9,
@@ -80,7 +80,7 @@ const initialState = [
       "A dictum bibendum pretium. Nulla placerat sem porttitor Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Maecenas et ipsum ante. Sed eleifend diam elit, sed faucibus nibh imperdiet ac.",
     tripDate: "5:90 - 04 Apr 2022",
     initialBudget: 800,
-    totalExpense: 450,
+    totalExpense: 764,
   },
   {
     tripId: 10,
@@ -89,7 +89,7 @@ const initialState = [
       "Nulla placerat sem porttitor Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae.Maecenas et ipsum ante. Sed eleifend diam elit, sed faucibus nibh imperdiet ac.",
     tripDate: "02:25 - 01 Nov 2000",
     initialBudget: 800,
-    totalExpense: 450,
+    totalExpense: 354,
   },
 ];
 
