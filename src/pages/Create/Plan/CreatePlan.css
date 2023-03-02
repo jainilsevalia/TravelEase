@@ -6,6 +6,10 @@
   font-family: 'Poppins', sans-serif;
 }
 
+
+.feed_container-latest_trip_div-button Button{
+  margin-bottom: 15px;
+}
 .page-container{
   display: flex;
   padding-top: 20px ;

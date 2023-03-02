@@ -103,7 +103,7 @@ const Feed = () => {
             className="recent_expense_in_feed"
             tripName={trip.tripName}
             tripTime={trip.tripDate}
-            tripExpense={"$"`${trip.totalExpense}`}
+            tripExpense={`$${trip.totalExpense}`}
           ></RecentExpense>
         ))}
 
