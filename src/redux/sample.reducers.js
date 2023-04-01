@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const sampleSlice = createSlice({
   name: "sample",
-  initialState: { tripIdSelected: 1 },
+  initialState: { tripIdSelected: "" },
   reducers: {
     selectedTripCard: (state, action) => {
       state.tripIdSelected = action.payload;

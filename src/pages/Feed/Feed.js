@@ -1,120 +1,97 @@
-import React from "react";
-import { LiveUpdateImage } from "../../components";
-import { RecentExpense } from "../../components";
-import { Button } from "../../components";
-import { Post } from "../../layouts";
-import "./feed.css";
-import Path from "../../constants/Path";
-import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+//Author: Shani Kachhadiya(sh248902@dal.ca) || Banner Id : B00917757
+
+import React, { useEffect, useState } from 'react';
+import { LiveUpdateImage } from '../../components';
+import { RecentExpense } from '../../components';
+import { Button } from '../../components';
+import { Post } from '../../layouts';
+import './feed.css';
+import Path from '../../constants/Path';
+import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import axios from 'axios';
+import { createPost } from '../../redux/postReducer';
+import { createLiveUpdate } from '../../redux/liveUpdate.reducer';
 
 const Feed = () => {
-  const post = useSelector((state) => state.post);
-  const recentTrip = useSelector((store) => store.tripDetails);
+	const dispatch = useDispatch();
+	const [recentTrip, setRecentTrip] = useState([]);
+	useEffect(() => {
+		axios
+			.get(`https://trip-ease-server.onrender.com/post/view`)
+			.then(function (response) {
+				dispatch(createPost(response.data));
+			});
+		axios
+			.get(`https://trip-ease-server.onrender.com/liveupdate/view`)
+			.then(function (response) {
+				dispatch(createLiveUpdate(response.data));
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+		axios.get('https://trip-ease-server.onrender.com/trip').then((response) => {
+			setRecentTrip(response.data.trips.reverse().slice(0, 5));
+		});
+	}, [dispatch]);
+	const post = useSelector((state) => state.post);
+	const liveUpdates = useSelector((state) => state.liveUpdate);
 
-  return (
-    <div className="feed_container">
-      <div className="live_update_div_in_home">
-        <div className="live_update_and_user_name">
-          <div className="live_update_in_feed">
-            <LiveUpdateImage live_update_url="./Images/1.jpg"></LiveUpdateImage>
-          </div>
-          <span className="userName_in_live_update">Shanikachhadiya</span>
-        </div>
-        <div className="live_update_and_user_name">
-          <div className="live_update_in_feed">
-            <LiveUpdateImage live_update_url="./Images/2.jpg"></LiveUpdateImage>
-          </div>
-          <span className="userName_in_live_update">jay ramani</span>
-        </div>
-        <div className="live_update_and_user_name">
-          <div className="live_update_in_feed">
-            <LiveUpdateImage live_update_url="./Images/3.jpg"></LiveUpdateImage>
-          </div>
-          <span className="userName_in_live_update">Jainil Sevalia</span>
-        </div>
-        <div className="live_update_and_user_name">
-          <div className="live_update_in_feed">
-            <LiveUpdateImage live_update_url="./Images/4.jpg"></LiveUpdateImage>
-          </div>
-          <span className="userName_in_live_update">Shvet Anaghan</span>
-        </div>
-        <div className="live_update_and_user_name">
-          <div className="live_update_in_feed">
-            <LiveUpdateImage live_update_url="./Images/5.jpg"></LiveUpdateImage>
-          </div>
-          <span className="userName_in_live_update">Shivam Patel</span>
-        </div>
-        <div className="live_update_and_user_name">
-          <div className="live_update_in_feed">
-            <LiveUpdateImage live_update_url="./Images/6.jpg"></LiveUpdateImage>
-          </div>
-          <span className="userName_in_live_update">UserName</span>
-        </div>
-        <div className="live_update_and_user_name">
-          <div className="live_update_in_feed">
-            <LiveUpdateImage live_update_url="./Images/7.jpg"></LiveUpdateImage>
-          </div>
-          <span className="userName_in_live_update">UserName</span>
-        </div>
-        <div className="live_update_and_user_name">
-          <div className="live_update_in_feed">
-            <LiveUpdateImage live_update_url="./Images/8.jpg"></LiveUpdateImage>
-          </div>
-          <span className="userName_in_live_update">UserName</span>
-        </div>
-        <div className="live_update_and_user_name">
-          <div className="live_update_in_feed">
-            <LiveUpdateImage live_update_url="./Images/9.jpg"></LiveUpdateImage>
-          </div>
-          <span className="userName_in_live_update">UserName</span>
-        </div>
-        <div className="live_update_and_user_name">
-          <div className="live_update_in_feed">
-            <LiveUpdateImage live_update_url="./Images/10.jpg"></LiveUpdateImage>
-          </div>
-          <span className="userName_in_live_update">UserName</span>
-        </div>
-        <div className="live_update_and_user_name">
-          <div className="live_update_in_feed">
-            <LiveUpdateImage live_update_url="./Images/11.jpg"></LiveUpdateImage>
-          </div>
-          <span className="userName_in_live_update">UserName</span>
-        </div>
-      </div>
-      <div className="feed_container-post_div">
-        {post.postData.map((post) => (
-          <Post
-            // post={post}
-            type="feed_post"
-            userName={post.userName}
-            location={post.location}
-            image={post.image}
-            description={post.description}
-          />
-        ))}
-      </div>
-      <div className="feed_container-latest_trip_div">
-        <div className="feed_container-latest_trip_div-heading">
-          Recent trips
-        </div>
-        {recentTrip.map((trip) => (
-          <RecentExpense
-            className="recent_expense_in_feed"
-            tripName={trip.tripName}
-            tripTime={trip.tripDate}
-            tripExpense={`$${trip.totalExpense}`}
-          ></RecentExpense>
-        ))}
+	return (
+		<div className="feed_container">
+			<div className="live_update_div_in_home">
+				{liveUpdates.liveUpdatesData.map((liveUpdates, i) => {
+					return (
+						<>
+							<LiveUpdateImage
+								type="horizontal"
+								live_update_url={liveUpdates.image}
+							/>
+							<div className="userName_in_live_update_outer_div">
+								<span className="userName_in_live_update">
+									{liveUpdates.userName}
+								</span>
+							</div>
+						</>
+					);
+				})}
+			</div>
+			<div className="feed_container-post_div">
+				{post.postData.map((post, i) => (
+					<Post
+						// post={post}
+						type="feed_post"
+						userName={post.userName}
+						location={post.location}
+						image={post.image}
+						description={post.description}
+					/>
+				))}
+			</div>
+			<div className="feed_container-latest_trip_div">
+				<div className="feed_container-latest_trip_div-heading">
+					Recent trips
+				</div>
+				{recentTrip.map((trip, i) => (
+					<RecentExpense
+						className="recent_expense_in_feed"
+						tripName={trip.tripName}
+						tripTime={trip.tripDate}
+						tripExpense={`$${trip.totalExpense}`}
+					></RecentExpense>
+				))}
 
-        <div className="feed_container-latest_trip_div-button">
-          <Link to={Path.MANAGE_EXPENSES}>
-            <Button variant="blue" name="SEE ALL EXPENSES" />
-          </Link>
-        </div>
-      </div>
-    </div>
-  );
+				<div className="feed_container-latest_trip_div-button">
+					<Link to={Path.MANAGE_EXPENSES}>
+						<Button
+							variant="blue"
+							name="SEE ALL EXPENSES"
+						/>
+					</Link>
+				</div>
+			</div>
+		</div>
+	);
 };
 
 export default Feed;

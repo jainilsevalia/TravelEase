@@ -1,12 +1,10 @@
-import { Link, useLocation } from "react-router-dom";
-import "./Navbar.css";
-import { FaSearch } from "react-icons/fa";
-import { FaPlusSquare } from "react-icons/fa";
-import React, { useState } from "react";
-import { FaBars } from "react-icons/fa";
-import { ImCross } from "react-icons/im";
-import Path from "../../constants/Path";
-
+import { Link, useLocation } from 'react-router-dom';
+import './Navbar.css';
+import { FaSearch } from 'react-icons/fa';
+import React, { useState, useEffect, useRef } from 'react';
+import { FaBars } from 'react-icons/fa';
+import { ImCross } from 'react-icons/im';
+import Path from '../../constants/Path';
 
 function NavbarFun() {
 	const location = useLocation();
@@ -17,95 +15,125 @@ function NavbarFun() {
 		setOpen(!open);
 	};
 
+	let menuRef = useRef();
+
+	useEffect(() => {
+		let handler = (e) => {
+			if (!menuRef.current.contains(e.target)) {
+				setOpen(false);
+			}
+		};
+		document.addEventListener('mousedown', handler);
+		return () => {
+			document.removeEventListener('mousedown', handler);
+		};
+	}, []);
+
 	const [Mobile, setMobile] = useState(false);
 	return (
 		<>
 			<nav className="navbar">
 				<div className="nav-container">
 					<div className="start">
-						<button
-							className="mobile-menu-icon nav-button"
-							onClick={() => setMobile(!Mobile)}
-						>
-							{Mobile ? <ImCross /> : <FaBars />}
-						</button>
-						<Link
-							className="logo"
-							to={Path.HOME}
-						>
-							TripEase
-						</Link>
-					</div>
-
-					<ul
-						className={Mobile ? "navlinks-mobile" : "navlinks"}
-						onClick={() => setMobile(false)}
-					>
-						<Link
-							to={Path.HOME}
-							className={`${
-								location.pathname === Path.HOME ? "active-tab" : "inActive-tab"
-							}`}
-						>
-							Feed
-						</Link>
-						<Link
-							to={Path.MANAGE_EXPENSES}
-							className={`${
-								location.pathname === "/manageExpense"
-									? "active-tab"
-									: "inActive-tab"
-							}`}
-						>
-							Expense
-						</Link>
-						<Link
-							to={Path.MESSAGE}
-							className={`${
-								location.pathname === Path.MESSAGE
-									? "active-tab"
-									: "inActive-tab"
-							}`}
-						>
-							Message
-						</Link>
-
-						{/* <div className={`${
-								(location.pathname === Path.ALL_PLAN || location.pathname === Path.MY_PLAN)
-									? "active-tab plan-dropdown"
-									: "inActive-tab plan-dropdown"
-							}`}>
-							<button	
-								className="plus nav-button"
-								onClick={handleOpenPlan}
+						<div className="logo">
+							<button
+								className="mobile-menu-icon nav-button"
+								onClick={() => setMobile(!Mobile)}
 							>
-								Plan<FaPlusSquare />{" "}
+								{Mobile ? <ImCross /> : <FaBars />}
 							</button>
-							{plan ? (
-								<ul className="menu">
-									<li className="menu-item">
-										<Link to={Path.ALL_PLAN} onClick={handleOpenPlan}>All Plan</Link>
-									</li>
-									<li className="menu-item">
-										<Link to={Path.MY_PLAN} onClick={handleOpenPlan}>Your Plan</Link>
-									</li>
-								</ul>
-							) : null}
-						</div> */}
+							<Link to={Path.HOME}>
+								<span className="first-half-logo">TRIP</span>
+								<span className="second-half-logo">EASE</span>
+							</Link>
+						</div>
 
-						<Link
+						<ul
+							className={Mobile ? 'navlinks-mobile' : 'navlinks'}
+							onClick={() => setMobile(false)}
+						>
+							{/* <Link
+								to={Path.HOME}
+								className={`${
+									location.pathname === Path.HOME
+										? 'active-tab'
+										: 'inActive-tab'
+								}`}
+							>
+								Feed
+							</Link>
+							<Link
+								to={Path.MANAGE_EXPENSES}
+								className={`${
+									location.pathname === '/manageExpense'
+										? 'active-tab'
+										: 'inActive-tab'
+								}`}
+							>
+								Expense
+							</Link>
+							<Link
+								to={Path.MESSAGE}
+								className={`${
+									location.pathname === Path.MESSAGE
+										? 'active-tab'
+										: 'inActive-tab'
+								}`}
+							>
+								Message
+							</Link> */}
+
+							{/* <Link
 							to={Path.ALL_PLAN}
 							className={`${
 								location.pathname === Path.ALL_PLAN ? "active-tab" : "inActive-tab"
 							}`}
-						>
-							Plan
-						</Link>
+						> */}
+							<Link
+								to={Path.HOME}
+								className={`${
+									location.pathname === Path.HOME
+										? 'active-tab'
+										: 'inActive-tab'
+								}`}
+							>
+								Feed
+							</Link>
+							<Link
+								to={Path.MANAGE_EXPENSES}
+								className={`${
+									location.pathname === '/manageExpense'
+										? 'active-tab'
+										: 'inActive-tab'
+								}`}
+							>
+								Expense
+							</Link>
+							<Link
+								to={Path.MESSAGE}
+								className={`${
+									location.pathname === Path.MESSAGE
+										? 'active-tab'
+										: 'inActive-tab'
+								}`}
+							>
+								Message
+							</Link>
 
+							<Link
+								to={Path.ALL_PLAN}
+								className={`${
+									location.pathname === Path.ALL_PLAN
+										? 'active-tab'
+										: 'inActive-tab'
+								}`}
+							>
+								Plan
+							</Link>
+						</ul>
+					</div>
 
-					</ul>
-
-					<div className={`end ${searchActive ? "search-active" : ""}`}>
+					<div className={`end ${searchActive ? 'search-active' : ''}`}>
 						<div
 							className="search"
 							onClick={() => {
@@ -129,30 +157,48 @@ function NavbarFun() {
 								<ImCross />
 							</div>
 						) : null}
-						<div className="dropdown">
+						<div
+							className="dropdown"
+							ref={menuRef}
+						>
 							<button
 								className="plus nav-button"
 								onClick={handleOpen}
 							>
-								<span>Create</span> <FaPlusSquare />{" "}
+								Create
 							</button>
 							{open ? (
 								<ul className="menu">
 									<li className="menu-item">
-										<Link to={Path.CREATE_POST} onClick={handleOpen}>Post</Link>
+										<Link
+											to={Path.CREATE_POST}
+											onClick={handleOpen}
+										>
+											Post
+										</Link>
 									</li>
 									<li className="menu-item">
-										<Link to={Path.CREATE_LIVE_UPDATES} onClick={handleOpen}>Stories</Link>
+										<Link
+											to={Path.CREATE_LIVE_UPDATES}
+											onClick={handleOpen}
+										>
+											Update
+										</Link>
 									</li>
 									<li className="menu-item">
-										<Link to={Path.CREATE_PLAN} onClick={handleOpen}>Plan</Link>
+										<Link
+											to={Path.CREATE_PLAN}
+											onClick={handleOpen}
+										>
+											Plan
+										</Link>
 									</li>
 								</ul>
 							) : null}
 						</div>
 
 						<Link to={Path.PROFILE_PAGE}>
-							<button className="nav-button">
+							<button className="profile-pic-navbar">
 								<img
 									src="./profile.jpg"
 									alt=" "

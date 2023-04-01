@@ -25,6 +25,14 @@ body{
     grid-template-columns: 30% 1fr;
 }
 
+.non_scrollable_expense_main_container{
+    display: grid;
+    height: 100vh;
+    overflow: hidden;
+    position: fixed;
+    grid-template-columns: 30% 1fr;
+}
+
 .expense-main-container::-webkit-scrollbar{
     display: none;
 }
@@ -33,6 +41,7 @@ body{
     border-right: 1px solid #ddd;
     width: auto;
     padding-bottom: 50px;
+    height: auto;
 }
 @media only screen and (max-width: 1000px){
     .expense-left-container-trip-list{
@@ -155,4 +164,35 @@ body{
     font-weight: 700;
     font-style: normal;
     align-items: left;
+}
+
+.trip-details-icon__edit{
+    height: 24px;
+    width: 24px;
+    padding-top: 5px;
+}
+
+.trip-details-icon__edit:hover{
+    fill: rgb(0,125,255);
+    cursor: pointer;
+}
+
+.trip-details-icon__delete{
+    height: 24px;
+    width: 24px;
+    margin-left:15px ;
+    margin-right:15px;
+    padding-top: 5px;
+}
+.trip-details-icon__delete:hover{
+    fill: red;
+    cursor: pointer;
+}
+
+.expense-transaction-button{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 12px;
+    margin-top: 24px;
 }

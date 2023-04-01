@@ -1,158 +1,246 @@
-import React from "react";
-import { MdEditNote } from "react-icons/md";
-import { MdDeleteOutline } from "react-icons/md";
-import { MdShare } from "react-icons/md";
-import { TbMessageCircle } from "react-icons/tb";
-import "./Allplan.css";
-import { useSelector } from "react-redux";
-import { Button } from "../../../components";
-import Path from "../../../constants/Path";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { MdEditNote } from 'react-icons/md';
+import { MdDeleteOutline } from 'react-icons/md';
+import { TbMessageCircle } from 'react-icons/tb';
+import './Allplan.css';
+import { Button } from '../../../components';
+import Path from '../../../constants/Path';
+import { Link } from 'react-router-dom';
+import EditPlanPopup from '../../../components/PopUp/EditPlanPopup';
+import PlanPopup from '../../../components/PopUp/PlanPopup';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import planUpdateId from '../../../redux/planupdate.reducer';
 
 const AllPlan = () => {
-  const planInfo = useSelector((state) => state.plans.planData);
+	const planUpdateId = useSelector((store) => store.updatePlan.planUpdateId);
+	const [plans, setPlans] = useState([]);
+	const [planId, setPlanId] = useState(null);
+	const [popupVisible, setPopupVisible] = useState(false);
+	const [popupPlanVisible, setPopupPlanVisible] = useState(false);
+	const [showAll, setShowAll] = useState(false);
+	const dispatch = useDispatch();
 
-  return (
-    <>
-      <div className="main-container">
-        <div className="left-container">
-          <div className="left-container-title">
-            <span className="left-container-title-bar">Your Plans</span>
+	const updateStatus = useSelector((state) => state.updatePlan.updateStatus);
+	const items = Array.from(
+		Array(
+			plans.filter((plan) => plan.email === 'ramanijay1212@gmail.com').length
+		).keys()
+	);
+	const [displayCount, setDisplayCount] = useState(2);
 
-            <Link to={Path.CREATE_PLAN}>
-              <Button
-                variant="blue"
-                name="+ Post Plan"
-                // onClick={handlePopup}
-              />
-            </Link>
-            {/* <Popup trigger={popupVisible} setTrigger={setPopupVisible}></Popup> */}
-          </div>
-          <div className="left-container__trip-list">
-            <div className="plan-card">
-              <div for="description" className="destination">
-                Calgary
-              </div>
-              <div className="dateandexpense">
-                <div className="dates">24-04-2023</div>
-                <div className="expense">$1500</div>
-              </div>
-              <div className="pt-2">
-                <p>
-                  The city and its immediate outskirts are home to several
-                  attractions, such as the Calgary Tower, Stephen Avenue Walk,
-                  Glenbow Museum, Devonian Gardens, Calgary Zoo, Inglewood Bird
-                  Sanctuary, and Calaway Park. For maps of Calgary attractions,
-                  visit Calgaryattractions.com (includes printable coupons) and
-                  Calgary Info Center .
-                </p>
-              </div>
-              <div className="customize">
-                <div className="update">
-                  <MdEditNote />
-                </div>
-                <div className="delete">
-                  <MdDeleteOutline />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="left-container__trip-list">
-            <div className="plan-card">
-              <div for="description" className="destination">
-                New York
-              </div>
-              <div className="dateandexpense">
-                <div className="dates">01-08-2023</div>
-                <div className="expense">$1800</div>
-              </div>
-              <div className="pt-2">
-                <p>
-                  New York is composed of five boroughs – Brooklyn, the Bronx,
-                  Manhattan, Queens and Staten Island - is home to 8.4 million
-                  people who speak more than 200 languages, hail from every
-                  corner of the globe, and, together, are the heart and soul of
-                  the most dynamic city in the world.
-                </p>
-              </div>
-              <div className="customize">
-                <div className="update">
-                  <MdEditNote />
-                </div>
-                <div className="delete">
-                  <MdDeleteOutline />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="left-container__trip-list">
-            <div className="plan-card">
-              <div for="description" className="destination">
-                Las-Vegas
-              </div>
-              <div className="dateandexpense">
-                <div className="dates">15-05-2023</div>
-                <div className="expense">$3500</div>
-              </div>
-              <div className="pt-2">
-                <p>
-                  One thing’s for sure: Las Vegas, Nevada is a place that needs
-                  no introduction. With its five-star resorts, world-class
-                  restaurants, stellar shopping, unrivaled entertainment, and
-                  24/7 pulse—from classic Downtown Las Vegas to the famous Las
-                  Vegas Strip and beyond—this one-of-a-kind city owns the throne
-                  as the world’s premier tourist destination. Get the lay of the
-                  land in Nevada’s largest city, a vision for visiting Vegas
-                  like a pro, and tips on exploring the stunning sights of
-                  southern Nevada.
-                </p>
-              </div>
-              <div className="customize">
-                <div className="update">
-                  <MdEditNote />
-                </div>
-                <div className="delete">
-                  <MdDeleteOutline />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+	const handleShowAll = () => {
+		// setDisplayCount(items.length);
+		setDisplayCount(displayCount + 1);
+	};
 
-        <div className="right-container">
-          <div className="all-plan-title">
-            <span>All Plans</span>
-          </div>
-          <div className="plans">
-            {planInfo.map((plan) => (
-              <div className="card">
-                <div for="description" className="destination">
-                  {plan.destination}
-                </div>
-                <div className="dateandexpense">
-                  <div className="dates">
-                    {plan.startdate} to {plan.enddate}
-                  </div>
-                  <div className="expense">${plan.expense_details}</div>
-                </div>
-                <div className="pt-2">
-                  <p>{plan.description}</p>
-                </div>
-                <div className="customize">
-                  <div className="share">
-                    <MdShare />
-                  </div>
-                  <div className="message">
-                    <TbMessageCircle />
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </>
-  );
+	const handleShowLess = () => {
+		setDisplayCount(2);
+	};
+
+	const handlePopup = (data) => {
+		setPlanId(data);
+		setPopupVisible(true);
+	};
+
+	const handlePlanPopup = (data) => {
+		setPlanId(data);
+		setPopupPlanVisible(true);
+	};
+
+	function toggleShowAll() {
+		setShowAll(!showAll);
+	}
+
+	function deleteFunction(data) {
+		return function () {
+			let message = 'Confirm delete?';
+			if (window.confirm(message) === true) {
+				axios
+					.delete(`https://trip-ease-server.onrender.com/plan/delete/${data}`)
+					.catch((error) => {
+						console.log(error);
+					});
+
+				toast.success('Plan deleted successfully!!', {
+					position: 'top-right',
+					autoClose: 3000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					progress: undefined,
+					theme: 'light',
+				});
+			} else {
+				toast.warn('Cancelled delete!!', {
+					position: 'top-right',
+					autoClose: 3000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					progress: undefined,
+					theme: 'light',
+				});
+			}
+		};
+	}
+
+	useEffect(() => {
+		fetchPlan();
+	}, [updateStatus]);
+
+	const fetchPlan = async () => {
+		const response = await axios.get(
+			'https://trip-ease-server.onrender.com/plan/'
+		);
+		setPlans(response.data);
+	};
+
+	return (
+		<>
+			<div
+				className={`${
+					popupVisible || popupPlanVisible
+						? 'non_scrollable_main_container'
+						: 'main-container'
+				}`}
+			>
+				<div className="left-container">
+					<div className="left-container-title">
+						<span className="left-container-title-bar">My Plans</span>
+
+						<Link to={Path.CREATE_PLAN}>
+							<Button
+								variant="transparent"
+								name="+ Post Plan"
+							/>
+						</Link>
+					</div>
+					<div className="left-container-own-plan">
+						{plans
+							.filter((plan) => plan.email === 'ramanijay1212@gmail.com')
+							.slice(0, displayCount)
+							.map((plan) => (
+								<div className="own-plan-card">
+									<div key={plan._id}>
+										<div className="card-title">
+											<div className="destination">{plan.destination}</div>
+
+											<div className="customize">
+												<div
+													className="update"
+													onClick={() => handlePopup(plan._id)}
+												>
+													<MdEditNote />
+												</div>
+
+												<EditPlanPopup
+													trigger={popupVisible}
+													setTrigger={setPopupVisible}
+													planId={planId}
+												></EditPlanPopup>
+
+												<div
+													className="delete"
+													onClick={deleteFunction(plan._id)}
+												>
+													<MdDeleteOutline />
+												</div>
+											</div>
+										</div>
+										<div className="dateandexpense">
+											<div className="dates">{plan.startDate}</div>
+										</div>
+										<div className="own-plan-description">
+											<div className="user_name_and_description">
+												<div>
+													{showAll
+														? plan.travelDescription
+														: `${plan.travelDescription.slice(0, 130)}....`}
+													<button
+														className="show_more_btn_in_description"
+														onClick={toggleShowAll}
+													>
+														{showAll ? 'show less' : 'show more'}
+													</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							))}
+						{displayCount < items.length && (
+							<div className="show-all-less">
+								{/* <Button className="btn-more-details" variant="grey" name="More details" onClick={() => handlePlanPopup(plan._id)}/> */}
+
+								<Button
+									className="show-all-less-button"
+									variant="grey"
+									name="Show All"
+									onClick={handleShowAll}
+								/>
+							</div>
+						)}
+						{displayCount === items.length && (
+							<div className="show-all-less">
+								<Button
+									className="show-all-less-button"
+									variant="grey"
+									name="Show Less"
+									onClick={handleShowLess}
+								/>
+							</div>
+						)}
+					</div>
+				</div>
+
+				<div className="right-container">
+					<div className="all-plan-title">
+						<span>All Plans</span>
+					</div>
+					<div className="plans">
+						{plans
+							.filter((plan) => plan.email !== 'ramanijay1212@gmail.com')
+							.map((plan) => (
+								<div className="card">
+									<div className="dateandexpense">
+										<div className="destination">{plan.destination}</div>
+										<div className="share">By {plan.firstName}</div>
+										<PlanPopup
+											trigger={popupPlanVisible}
+											setTrigger={setPopupPlanVisible}
+											planId={planId}
+										></PlanPopup>
+									</div>
+									<div className="dates">{plan.startDate}</div>
+									<div className="pt-2">
+										<p>{plan.travelDescription.slice(0, 150)}....</p>
+									</div>
+									<hr />
+
+									<div className="plan-by-section">
+										<Button
+											className="btn-more-details"
+											variant="grey"
+											name="More details"
+											onClick={() => handlePlanPopup(plan._id)}
+										/>
+
+										<div className="message">
+											<TbMessageCircle />
+										</div>
+									</div>
+								</div>
+							))}
+					</div>
+				</div>
+			</div>
+		</>
+	);
 };
 
 export default AllPlan;

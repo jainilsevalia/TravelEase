@@ -1,3 +1,5 @@
+/* Author: Shani Kachhadiya(sh248902@dal.ca) || Banner Id : B00917757 */
+
 .profile_pic {
 	border-radius: 50%;
 	cursor: pointer;
@@ -73,7 +75,7 @@
 	cursor: pointer;
 	z-index: 1000;
 }
-.model img {
+.profile_pic_in_big_view {
 	position: absolute;
 	top: 50%;
 	left: 50%;

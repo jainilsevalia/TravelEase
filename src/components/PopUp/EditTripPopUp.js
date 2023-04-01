@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Button, InputField } from "..";
-import "../PopUp/PopUp.styles.css";
+import "./EditTripPopUp.styles.css";
 import TextArea from "../TextArea/TextArea";
 import { axios } from "../../utils/axios";
 import { useDispatch } from "react-redux";
 import { tripAdded } from "../../redux/addTrip.reducers";
 import { toast } from "react-toastify";
 
-const PopUp = (props) => {
+const EditTripPopUp = (props) => {
   const dispatch = useDispatch();
 
   const initialValues = {
@@ -32,31 +32,58 @@ const PopUp = (props) => {
     }
   }, [errorCheck, formValues]);
 
-  const handleSave = (e) => {
-    e.preventDefault();
+  useEffect(() => {
+    try {
+      axios.get(`/trip/get/${props.selectedTripCard}`).then((response) => {
+        setFormValues(response.data.trip);
+      });
+    } catch (err) {
+      toast.error("Something went wrong!! Try again!!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
+  }, []);
+
+  const handleSave = () => {
     setFormErrors(validate(formValues));
     setErrorCheck(true);
     if (Object.keys(formErrors).length === 0) {
       props.setTrigger(false);
       try {
         axios
-          .post("/trip/add", {
+          .patch(`/trip/update/${props.selectedTripCard}`, {
             // TODO: Remove user ID
             userId: "64147ef19c2f3ba112246a4f",
             tripName: formValues.tripName,
             tripDescription: formValues.tripDescription,
             tripDate: formValues.tripDate,
             initialBudget: formValues.initialBudget,
-            totalExpense: 0,
           })
           .then((response) => {
             if (response.data.success) {
               setFormValues(initialValues);
+              dispatch(tripAdded(response.data.updateTrip._id));
               setFormErrors(initialValues);
               setErrorCheck(false);
-              dispatch(tripAdded(response.data.trip._id));
+              toast.success("Trip Edited successfully!!", {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+              });
             } else {
-              toast.success("Trip added successfully!!", {
+              toast.error("Something went wrong!! Try again!!", {
                 position: "top-right",
                 autoClose: 3000,
                 hideProgressBar: false,
@@ -87,7 +114,7 @@ const PopUp = (props) => {
     const errors = {};
     const numRegex = /^[0-9]*$/i;
     const dateRegex =
-      /^((0[1-9]|[1-2][0-9]|3[0-1])\/(0[1-9]|1[0-2])\/(202[3-9]))$/i;
+      /^((0[1-9]|[1-2][0-9]|3[0-1])\/(0[1-9]|1[0-2])\/(202[0-9]))$/i;
 
     if (!values.tripDate) {
       errors.tripDate = "Trip Date is required!";
@@ -113,10 +140,10 @@ const PopUp = (props) => {
       <div className="popup-inner">
         <div className="popup-button-close">
           <div className="">
-            <span className="card-trip-title__popup">New Trip</span>
+            <span className="card-trip-title__popup">Update Trip</span>
           </div>
           <Button
-            className="close-btn dynamic-button"
+            className="close-btn"
             variant="transparent"
             name="Close"
             onClick={() => props.setTrigger(false)}
@@ -128,6 +155,7 @@ const PopUp = (props) => {
             id="Trip Name"
             type="text"
             name="tripName"
+            value={formValues.tripName}
             handleChange={handleChange}
             error={formErrors.tripName}
           />
@@ -136,6 +164,7 @@ const PopUp = (props) => {
             id="Trip Description"
             type="text"
             name="tripDescription"
+            value={formValues.tripDescription}
             handleChange={handleChange}
             error={formErrors.tripDescription}
           />
@@ -144,6 +173,7 @@ const PopUp = (props) => {
             id="Intial Budget"
             type="text"
             name="initialBudget"
+            value={formValues.initialBudget}
             handleChange={handleChange}
             error={formErrors.initialBudget}
           />
@@ -152,6 +182,7 @@ const PopUp = (props) => {
             id="Date"
             type="text"
             name="tripDate"
+            value={formValues.tripDate}
             handleChange={handleChange}
             error={formErrors.tripDate}
           />
@@ -166,4 +197,4 @@ const PopUp = (props) => {
   );
 };
 
-export default PopUp;
+export default EditTripPopUp;

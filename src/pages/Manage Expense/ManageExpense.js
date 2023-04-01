@@ -3,29 +3,37 @@ import "../Manage Expense/ManageExpenses.styles.css";
 import Transaction from "../../layouts/TransactionDetails/Transaction";
 import TripCard from "../../layouts/TripCardME/TripCardME";
 import TripExpenseDetails from "../../layouts/TripExpenseDetails/TripExpenseDetails";
-import { Button, Popup } from "../../components";
+import { Button, IconComponent, Popup } from "../../components";
 import AddExpensePopUp from "../../components/AddExpensePopUp/AddExpensePopUp";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectedTripCard } from "../../redux/sample.reducers";
-const ManageExpense = () => {
+import { axios } from "../../utils/axios";
+import { expenseAdded } from "../../redux/expenseAdded.reducer";
+import { tripAdded } from "../../redux/addTrip.reducers";
+import EditTripPopUp from "../../components/PopUp/EditTripPopUp";
+import { toast } from "react-toastify";
+
+const ManageExpense = (props) => {
+  const expenseAddedState = useSelector((store) => store.addExpense);
+  const tripAddedState = useSelector((store) => store.addTrip);
+
   const [popupVisible, setPopupVisible] = useState(false);
+  const [editPopupVisible, setEditPopupVisible] = useState(false);
   const [popupVisibleForAddExpense, setPopupVisibleForAddExpense] =
     useState(false);
-  const [tripId, setTripId] = useState(1);
 
   const myRef = useRef(null);
   const [ref, setRef] = useState(false);
 
-  const tripInfo = useSelector((store) => store.tripDetails);
-  const transactionInfo = useSelector((store) => store.transaction);
+  const [tripInformation, setTripInformation] = useState([]);
+  const [transactionInformation, setTransactionInformation] = useState([]);
 
   const dispatch = useDispatch();
 
   const handleTripClick = (idSelected) => {
-    setTripId(idSelected);
+    setSelectedTripId(idSelected);
     setRef(true);
     dispatch(selectedTripCard(idSelected));
-    console.log(document.querySelector(".left-container-trip-list").classList);
   };
 
   useEffect(() => {
@@ -35,15 +43,102 @@ const ManageExpense = () => {
     }
   }, [ref]);
 
+  useEffect(() => {
+    props.setProgress(10);
+    try {
+      axios.get("/trip").then((response) => {
+        setTripInformation(response.data.trips.reverse());
+        setSelectedTripId(response.data.trips[0]?._id || "");
+        dispatch(selectedTripCard(response.data.trips[0]?._id || ""));
+        props.setProgress(100);
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }, [tripAddedState, dispatch, expenseAddedState]);
+  const [selectedTripId, setSelectedTripId] = useState("");
+
+  useEffect(() => {
+    try {
+      props.setProgress(10);
+      axios.get(`/expense/${selectedTripId}`).then((response) => {
+        setTransactionInformation(response.data.expense);
+        dispatch(expenseAdded(""));
+        props.setProgress(100);
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }, [selectedTripId, dispatch, expenseAddedState]);
   const handlePopup = () => {
     setPopupVisible(true);
   };
   const handleExpensePopUp = () => {
     setPopupVisibleForAddExpense(true);
   };
+
+  const handleTripEdit = () => {
+    setEditPopupVisible(true);
+  };
+
+  const handleTripDelete = () => {
+    dispatch(tripAdded(`${selectedTripId}`));
+    let message = "Confirm Delete?";
+    if (window.confirm(message) === true) {
+      props.setProgress(10);
+      axios.delete(`/trip/delete/${selectedTripId}`).then((response) => {
+        try {
+          if (response.data.success) {
+            setSelectedTripId("");
+            dispatch(tripAdded(""));
+            toast.success("Trip Deleted successfully!!", {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
+            props.setProgress(100);
+          } else {
+            toast.error("Something went wrong!! Try again!!", {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
+          }
+        } catch (err) {
+          toast.error("Something went wrong!! Try again!!", {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
+      });
+    }
+  };
+
   return (
     <>
-      <div className="expense-main-container">
+      <div
+        className={`${
+          popupVisible || editPopupVisible || popupVisibleForAddExpense
+            ? "non_scrollable_expense_main_container"
+            : "expense-main-container"
+        }`}
+      >
         <div className="expense-left-container-trip-list">
           <div className="expense-left-container__title-bar">
             <span className="expense-left-container-title-bar__title">
@@ -53,8 +148,8 @@ const ManageExpense = () => {
             <Popup trigger={popupVisible} setTrigger={setPopupVisible}></Popup>
           </div>
           <div className="expense-left-container__trip-list">
-            {tripInfo.map((trip) => (
-              <div onClick={() => handleTripClick(trip.tripId)}>
+            {tripInformation.map((trip) => (
+              <div onClick={() => handleTripClick(trip._id)}>
                 <TripCard
                   props={{
                     title: `${trip.tripName}`,
@@ -71,20 +166,61 @@ const ManageExpense = () => {
             <div>
               <div className="expense-right-container__title-bar">
                 <div className="expense-right-container-title-bar__title">
-                  <span>{tripInfo[tripId - 1].tripName}</span>
+                  <span>
+                    {
+                      tripInformation.find(
+                        (trip) => trip._id === selectedTripId
+                      )?.tripName
+                    }
+                  </span>
                 </div>
                 <div className="expesnse-right-container-title-bar__date">
-                  <span>{tripInfo[tripId - 1].tripDate}</span>
+                  <IconComponent
+                    name="edit"
+                    className="trip-details-icon__edit"
+                    onClick={handleTripEdit}
+                  />
+                  {editPopupVisible ? (
+                    <EditTripPopUp
+                      selectedTripCard={selectedTripId}
+                      trigger={editPopupVisible}
+                      setTrigger={setEditPopupVisible}
+                    />
+                  ) : (
+                    ""
+                  )}
+                  <IconComponent
+                    name="delete"
+                    className="trip-details-icon__delete"
+                    onClick={handleTripDelete}
+                  />
+                  <span>
+                    {
+                      tripInformation.find(
+                        (trip) => trip._id === selectedTripId
+                      )?.tripDate
+                    }
+                  </span>
                 </div>
               </div>
               <div className="expense-right-container__description">
                 <TripExpenseDetails
                   props={{
                     detailedDescription: `${
-                      tripInfo[tripId - 1].tripDescription
+                      tripInformation.find(
+                        (trip) => trip._id === selectedTripId
+                      )?.tripDescription
                     }`,
-                    initialBudget: `$ ${tripInfo[tripId - 1].initialBudget}`,
-                    totalExpense: `$ ${tripInfo[tripId - 1].totalExpense}`,
+                    initialBudget: `$ ${
+                      tripInformation.find(
+                        (trip) => trip._id === selectedTripId
+                      )?.initialBudget
+                    }`,
+                    totalExpense: `$ ${
+                      tripInformation.find(
+                        (trip) => trip._id === selectedTripId
+                      )?.totalExpense
+                    }`,
                   }}
                 />
               </div>
@@ -99,19 +235,19 @@ const ManageExpense = () => {
                     onClick={handleExpensePopUp}
                   />
                   <AddExpensePopUp
-                    selectedTripCard={tripId}
+                    selectedTripCard={selectedTripId}
                     trigger={popupVisibleForAddExpense}
                     setTrigger={setPopupVisibleForAddExpense}
                   ></AddExpensePopUp>
                 </div>
               </div>
               <div className="expense-right-container__transaction">
-                {transactionInfo.map((transaction) => {
-                  return transaction.tripId === tripId ? (
+                {transactionInformation.map((transaction) => {
+                  return transaction.tripId === selectedTripId ? (
                     <Transaction
                       props={{
                         transactionName: `${transaction.transactionName}`,
-                        transactionId: `${transaction.transactionId}`,
+                        transactionId: `${transaction._id}`,
                         transactionAmount: `$ ${transaction.transactionAmount}`,
                       }}
                     />

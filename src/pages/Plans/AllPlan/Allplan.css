@@ -1,13 +1,22 @@
 .card{
     border: 1px solid #eee;
-    margin: 20px;
-    padding: 20px;
+    background-color: #FFFFFF;
+    padding: 20px 20px 10px 20px;
     position: relative;
     border-radius: 12px;
     box-shadow:  rgba(55,84,170,0.50) 0 5px 20px;
-    width: 90%;
-    
-  }
+}
+
+.own-plan-card {
+  border: 1px solid #eee;
+  margin: 20px auto;
+  padding: 10px 10px 10px 10px;
+  position: relative;
+  border-radius: 12px;
+  
+  box-shadow: rgba(55, 84, 170, 0.50) 0 5px 20px;
+  width: 90%;
+}
 
 .plan-card{
     border: 1px solid #eee;
@@ -16,8 +25,74 @@
     position: relative;
     border-radius: 12px;
     box-shadow:  rgba(55,84,170,0.50) 0 5px 20px;
-    width: 90%;
+    width: 100%;
+}
 
+.right-container{
+  overflow-y: scroll;
+  background-color: #F5F7F9;
+}
+
+.left-container-title{
+  display: flex;
+  justify-content: space-between;
+  margin: 25px 10px 0px 20px;
+}
+
+
+.left-container-title-bar{
+  color: var(--bunting);
+  font-family: var(--font-family-poppins);
+  font-size: var(--font-size-m);
+  font-weight: 700;
+}
+
+.all-plan-title{
+  letter-spacing: 0;
+  line-height: normal;
+  min-height: 24px;
+  align-items: center;
+  text-align: center;
+  color: var(--bunting);
+  font-family: var(--font-family-poppins);
+  font-size: var(--font-size-m);
+  font-weight: 700;
+  font-style: normal;
+  margin-top: 25px;
+}
+
+.main-container {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  /* overflow-y: scroll; */
+  height: 100vh;
+}
+
+.non_scrollable_main_container{
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  position: fixed;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+}
+
+.left-container{
+    /* display: grid; */
+    /* grid-template-rows: 1fr; */
+    border-right: 1px solid #ddd;
+    min-width: 300px;
+    
+    /* overflow-y: scroll; */
+    height: auto; 
+}
+/* 
+.left-container-own-plan{
+    height: 100vh;
+} */
+
+.left-container::-webkit-scrollbar{
+  display: none;
 }
 
 .left-container-title{
@@ -34,37 +109,6 @@
   font-weight: 700;
 }
 
-
-.all-plan-title{
-  letter-spacing: 0;
-  line-height: normal;
-  min-height: 24px;
-  align-items: center;
-  text-align: center;
-  color: var(--bunting);
-  font-family: var(--font-family-poppins);
-  font-size: var(--font-size-m);
-  font-weight: 700;
-  font-style: normal;
-  margin-top: 25px;
-}
-.main-container {
-  display: grid;
-  grid-template-columns: 1fr 3fr;
-}
-
-.left-container{
-    border-right: 1px solid #ddd;
-    min-width: 300px;
-    /* width: 300px; */
-    overflow-y: scroll;
-    height: 100vh; 
-}
-
-.left-container::-webkit-scrollbar{
-  display: none;
-}
-
 .card:hover{
   box-shadow:  rgba(55,84,170,0.50) 0 5px 40px;
 }  
@@ -73,9 +117,7 @@
     display: grid;
 	  grid-template-columns: 1fr 1fr 1fr;
     width: 100%;
-    min-width: 350px;
     align-items: center;
-    overflow-y: scroll;
   }
 
   .plan::-webkit-scrollbar{
@@ -85,45 +127,71 @@
   .destination{
     color:#0D0D0D;
     font-weight: bold;
+    padding-left: 5px;
+    font-size: 20px;
   }
 
   .dateandexpense{
     display: flex;
     justify-content: space-between;
+    align-items: center;
+  }
+
+  .btn-more-details{
+    border-radius: 12px;
+    margin: auto 2px;
+    padding: 5px;
+    border: none;
+    color: blue;
+    padding: 0 3px 0 3px;
+  }
+
+  .own-plan-description{
+      padding : 5px 5px 0px 5px;
+      margin-top: 10px;
+      border-radius: 8px;  
+  }
+  hr {
+      margin: 10px auto;
+      width: 100%;
+      border-top: 1px solid #6D757A;
   }
 
   .pt-2{
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding-top: 5px;
+    margin-top: 10px;
     padding-left: 5px;
-    overflow-y: scroll;
-    height: 200px;
-    margin-top: 20px;
-    margin-bottom: 20px;
+    /* height: 100px; */
     border-radius: 8px;
-    background-color: #F5F5F5;
-  }
-
-  .pt-2::-webkit-scrollbar{
-    display: none;
   }
   
   .dates{
-     font-weight:bold;
+     color: #6D757A;
+     padding-left: 5px;
   }
   
   .expense{
      font-weight:bold;
   }
   
+  .card-title{
+    display: flex;
+    justify-content: space-between;  
+  }
   .customize{
     display: flex;
-    justify-content: space-between;
+    padding: 5px;
+    gap: 20px;
+  }
+  .plan-by-section{
+    display: flex;
+    justify-content: space-between ;
   }
 
   .delete svg{
-    height: 20px;
-    width: 20px;
+    height: 22px;
+    width: 25px;
+    padding-top: 2px;
   } 
   
   .delete svg:hover{
@@ -141,18 +209,28 @@
   
   
   .message svg{
-    height: 20px;
-    width: 20px;
+    height: 30px;
+    width: 30px;
+  }
+  
+  .share{
+    color: #6D757A;
+  }
+
+
+  .show-all-less{
+      text-align: center;
+    }
+
+.show-all-less-button{
+    border-radius: 4px;
+      margin: auto 2px;
+      padding: 5px;
+      border: 1px solid black;
+      padding: 0 3px 0 3px;
   }
 
   @media (max-width:813px){
-
-    /* .page-container{
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    } */
 
     .card{
       width: 95%;
@@ -160,6 +238,11 @@
 
     .plans{
       width: 95%;
+      margin : 20px auto;
+    }
+
+    .left-container-own-plan{
+      width:95%;
     }
 
     .submit{
@@ -170,38 +253,54 @@
       justify-content: center;
       align-items: center;
     }
-
-
 }
+
 @media (max-width: 1260px) {
   .plans{
     display: grid;
     grid-template-columns: 1fr 1fr;
   }
+  .left-container-own-plan {
+    width: 95%;
+    margin: 20px auto;
+  }
   .card{
-    margin: 10px auto;
+    margin: 20px auto;
+    width:90%;
   }
 }
 @media  (max-width:1050px){
   .plans{
     display: flex;
     flex-direction: column;
-    margin-top: 10px;
-
+    margin: 0px auto;
   }
   .card{
-    width: 300px;
+    width: 90%;
   }
+    .left-container-own-plan {
+      width: 95%;
+      margin: 20px auto;
+    }
 }
 
-@media (max-width:650px){
-  .main-container{
+@media (max-width:660px){
+  .non_scrollable_main_container{
     display: flex;
     flex-direction: column;
   }
+  .main-container{
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+
+  /* .left-container{
+    overflow-y: none;
+  } */
+
   .plan{
     width:90%;
-    margin-top: 15px;
+    margin: 15px auto;
     position: relative;
   }
   .card{
@@ -212,4 +311,8 @@
     margin-left: auto;
     margin-right: auto;
   }
+    .left-container-own-plan {
+      width: 95%;
+      margin: 20px auto;
+    }
 }

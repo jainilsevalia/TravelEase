@@ -1,3 +1,5 @@
+//Author: Shani Kachhadiya(sh248902@dal.ca) || Banner Id : B00917757
+
 import React, { useState } from 'react';
 import './ProfilePic.css';
 
@@ -30,6 +32,7 @@ const ProfilePic = (props) => {
 					></div>
 					<span onClick={toggleModel}>&times;</span>
 					<img
+						className="profile_pic_in_big_view"
 						src={props.image_url}
 						alt="No profile pic available"
 					></img>

@@ -1,26 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import Button from "../Button/ButtonComp";
-import InputField from "../InputField/InputField";
-import "../AddExpensePopUp/AddExpensePopUp.styles.css";
-import { addTransaction } from "../../redux/Transaction.reducer";
+import { useDispatch } from "react-redux";
+import { Button, InputField } from "..";
+import "./EditExpensePopUp.styles.css";
 import { axios } from "../../utils/axios";
 import { expenseAdded } from "../../redux/expenseAdded.reducer";
 import { toast } from "react-toastify";
 
-const AddExpensePopUp = (props) => {
-  const selectedTripId = useSelector((store) => store.sample);
-  const [wantToPay, setWantToPay] = useState(false);
-  const [currentExpenseId, setCurrentExpenseId] = useState("");
+const EditExpensePopUp = (props) => {
+  const dispatch = useDispatch();
+
   const initialValues = {
-    tripId: selectedTripId.tripIdSelected,
     transactionName: "",
     transactionAmount: "",
   };
   const [formValues, setFormValues] = useState(initialValues);
   const [formErrors, setFormErrors] = useState(initialValues);
   const [errorCheck, setErrorCheck] = useState(false);
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
@@ -32,26 +27,22 @@ const AddExpensePopUp = (props) => {
     }
   }, [errorCheck, formValues]);
 
-  const handlePayExpense = () => {
+  const handleTransactionSave = () => {
     setFormErrors(validate(formValues));
     setErrorCheck(true);
     if (Object.keys(formErrors).length === 0) {
       props.setTrigger(false);
       axios
-        .post("/expense/add", {
-          tripId: selectedTripId.tripIdSelected,
+        .patch(`/expense/update/${props.transactionId}`, {
           transactionName: formValues.transactionName,
           transactionAmount: formValues.transactionAmount,
         })
         .then((response) => {
           if (response.data.success) {
-            dispatch(expenseAdded(response.data.expense._id));
-            setWantToPay(true);
-            setCurrentExpenseId(response.data.expense._id);
-            setFormValues(initialValues);
+            dispatch(expenseAdded(response.data.updatedExpense._id));
             setFormErrors(initialValues);
             setErrorCheck(false);
-            toast.success("Expense added successfully!!", {
+            toast.success("Expense Edited successfully!!", {
               position: "top-right",
               autoClose: 3000,
               hideProgressBar: false,
@@ -74,12 +65,10 @@ const AddExpensePopUp = (props) => {
             });
           }
         });
-      dispatch(addTransaction(formValues));
-      setFormValues(initialValues);
     }
   };
-
   const validate = (values) => {
+    console.log(values);
     const errors = {};
     const numRegex = /^[0-9]*$/i;
     if (!values.transactionName) {
@@ -95,28 +84,25 @@ const AddExpensePopUp = (props) => {
 
   useEffect(() => {
     try {
-      if (wantToPay) {
-        axios
-          .post("/expense/pay", {
-            expenseId: currentExpenseId,
-          })
-          .then((response) => {
-            console.log(response.data.sessionUrl);
-            window.location = response.data.sessionUrl;
-            setFormValues(initialValues);
-            setWantToPay(false);
-            toast.success("Expense added successfully!!", {
-              position: "top-right",
-              autoClose: 3000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light",
-            });
+      axios.get(`/expense/get/${props.transactionId}`).then((response) => {
+        if (response.data.success) {
+          setFormValues({
+            transactionName: response.data.expense.transactionName,
+            transactionAmount: response.data.expense.transactionAmount,
           });
-      }
+        } else {
+          toast.error("Something went wrong!! Try again!!", {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
+      });
     } catch (err) {
       toast.error("Something went wrong!! Try again!!", {
         position: "top-right",
@@ -129,70 +115,20 @@ const AddExpensePopUp = (props) => {
         theme: "light",
       });
     }
-  }, [wantToPay]);
-
-  const dispatch = useDispatch();
-
-  const handleTransactionSave = () => {
-    setFormErrors(validate(formValues));
-    setErrorCheck(true);
-    if (Object.keys(formErrors).length === 0) {
-      props.setTrigger(false);
-      axios
-        .post("/expense/add", {
-          tripId: selectedTripId.tripIdSelected,
-          transactionName: formValues.transactionName,
-          transactionAmount: formValues.transactionAmount,
-        })
-        .then((response) => {
-          if (response.data.success) {
-            dispatch(expenseAdded(response.data.expense._id));
-            setFormValues(initialValues);
-            setFormErrors(initialValues);
-            setErrorCheck(false);
-            toast.success("Expense added successfully!!", {
-              position: "top-right",
-              autoClose: 3000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light",
-            });
-          } else {
-            toast.error("Something went wrong!! Try again!!", {
-              position: "top-right",
-              autoClose: 3000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light",
-            });
-          }
-        });
-    }
-  };
+  }, [props.transactionId]);
 
   return props.trigger ? (
     <div className="popup">
       <div className="popup-inner">
         <div className="popup-button-close">
           <div className="">
-            <span className="card-trip-title__popup">New Expense</span>
+            <span className="card-trip-title__popup">Edit Expense</span>
           </div>
           <Button
             className="close-btn dynamic-button"
             variant="transparent"
             name="Close"
-            onClick={() => {
-              props.setTrigger(false);
-              setFormValues(initialValues);
-              setFormErrors(initialValues);
-              setErrorCheck(false);
-            }}
+            onClick={() => props.setTrigger(false)}
           />
         </div>
         <div className="popup-input-list">
@@ -201,6 +137,7 @@ const AddExpensePopUp = (props) => {
             id="Expense Name"
             type="text"
             name="transactionName"
+            value={formValues.transactionName}
             handleChange={handleChange}
             error={formErrors.transactionName}
           />
@@ -209,13 +146,13 @@ const AddExpensePopUp = (props) => {
             id="Expense Amount"
             type="text"
             name="transactionAmount"
+            value={formValues.transactionAmount}
             handleChange={handleChange}
             error={formErrors.transactionAmount}
           />
         </div>
         <div className="popup-save-button">
           <Button variant="blue" name="Save" onClick={handleTransactionSave} />
-          <Button variant="blue" name="Pay" onClick={handlePayExpense} />
         </div>
         {props.children}
       </div>
@@ -225,4 +162,4 @@ const AddExpensePopUp = (props) => {
   );
 };
 
-export default AddExpensePopUp;
+export default EditExpensePopUp;

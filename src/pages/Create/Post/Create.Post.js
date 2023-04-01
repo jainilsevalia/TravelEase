@@ -1,28 +1,40 @@
+//Author: Shani Kachhadiya(sh248902@dal.ca) || Banner Id : B00917757
+
 import React, { useEffect, useState } from 'react';
 import { InputField } from '../../../components';
 import { Button } from '../../../components';
 import TextArea from '../../../components/TextArea/TextArea';
-import { useDispatch, useSelector } from 'react-redux';
 import './CreatePost.css';
 import { useNavigate } from 'react-router-dom';
-import { createPost } from '../../../redux/postReducer';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function CreatePost() {
-	const postDataArray = useSelector((store) => store.post.postData);
-	const postID = postDataArray.length + 1;
 	const initialValues = {
-		postId: postID,
-		caption: '',
+		// Static data given, because user data did not came from authentication module!!
+		userId: 123,
+		// userId: props.userId,
+		userName: 'Shani',
+		// userName: props.userName,
+		postImage: '',
 		location: '',
 		description: '',
 	};
+	const initialErrorValues = {
+		imageError: '',
+		locationError: '',
+	};
+	const locationRegex = /^[a-z ,.'-]+$/i;
+
 	const [formValues, setFormValues] = useState(initialValues);
-	const [formErrors, setFormErrors] = useState({});
 	const [isSubmit, setIsSubmit] = useState(false);
 	const [image, setImage] = useState(null);
+	const [errorMessage, setErrorMessage] = useState(initialErrorValues);
+	const [isImageValidated, setIsImageValidaed] = useState(false);
+	const [isLocationValidated, setIsLocationValidated] = useState(false);
+
 	const navigate = useNavigate();
-	const dispatch = useDispatch();
-	const postData = useSelector((state) => state.post.postData);
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
@@ -30,68 +42,149 @@ function CreatePost() {
 	};
 
 	const onImageChange = (e) => {
-		if (e.target.files && e.target.files[0]) {
-			setImage(URL.createObjectURL(e.target.files[0]));
+		const imageUrl = validateImage(URL.createObjectURL(e.target.files[0]));
+		setImage(imageUrl);
+		setFormValues((prevState) => ({
+			...prevState,
+			postImage: validateImage(e.target.files[0]),
+		}));
+	};
+	// validate Uploaded image
+	const validateImage = (value) => {
+		value === ' '
+			? setErrorMessage((prevState) => ({
+					...prevState,
+					imageError: 'please select an Image!!',
+			  }))
+			: setErrorMessage((prevState) => ({
+					...prevState,
+					imageError: '',
+			  }));
+		setIsImageValidaed(true);
+		return value;
+	};
+
+	const handleChangeLocation = (e) => {
+		setFormValues((prevState) => ({
+			...prevState,
+			location: validateLocation(e.target.value),
+		}));
+	};
+
+	// validate entered location
+	const validateLocation = (value) => {
+		if (value === '') {
+			setErrorMessage((prevState) => ({
+				...prevState,
+				locationError: 'please enter valid input!!',
+			}));
+		} else if (!locationRegex.test(value)) {
+			setErrorMessage((prevState) => ({
+				...prevState,
+				locationError: 'Location sould not contain numbers!!',
+			}));
+		} else {
+			setErrorMessage((prevState) => ({
+				...prevState,
+				locationError: '',
+			}));
 		}
+		setIsLocationValidated(true);
+		return value;
 	};
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		// console.log(formValues);
-		setFormErrors(validate(formValues));
+		if (isImageValidated && isLocationValidated) {
+			if (
+				errorMessage.locationError === '' &&
+				errorMessage.imageError === '' &&
+				image !== ''
+			) {
+				axios
+					.post(
+						'https://trip-ease-server.onrender.com/post/create',
+						{
+							userId: formValues.userId,
+							userName: formValues.userName,
+							postImage: formValues.postImage,
+							location: formValues.location,
+							description: formValues.description,
+						},
+						{
+							headers: {
+								'Content-Type': 'multipart/form-data',
+							},
+						}
+					)
+					.then(function (response) {
+						// dispatch(createPost(formValues));
+					});
 
-		if (
-			Object.keys(formErrors).length === 0 &&
-			formValues.location !== '' &&
-			image
-		) {
-			dispatch(createPost(formValues));
-			console.log(postData);
-
-			setIsSubmit(true);
+				setIsSubmit(true);
+			} else {
+				setIsSubmit(false);
+				toast.error('Invalid data entered!!', {
+					position: 'top-right',
+					autoClose: 3000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					progress: undefined,
+					theme: 'light',
+				});
+			}
 		} else {
 			setIsSubmit(false);
+			toast.error('Please add Image and Location!!', {
+				position: 'top-right',
+				autoClose: 3000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+				theme: 'light',
+			});
 		}
 	};
 
 	useEffect(() => {
 		if (isSubmit) {
-			navigate('/');
+			navigate('/profile');
+			toast.success('Post Created successfully!!', {
+				position: 'top-right',
+				autoClose: 3000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+				theme: 'light',
+			});
 		}
 	}, [isSubmit, navigate]);
 
-	const validate = (values) => {
-		const errors = {};
-
-		if (image === null) {
-			errors.photo = 'Photo is required!';
-		}
-
-		if (values.location === '') {
-			errors.location = 'location is required!';
-		}
-		return errors;
-	};
-
 	return (
-		<>
-			<div className="title">New Post</div>
+		<div className="create_post_outer_div">
+			<div className="title_for_create_post">Create New Post</div>
 
-			<form onSubmit={handleSubmit}>
+			<form
+				onSubmit={handleSubmit}
+				encType="multipart/form-data"
+			>
 				<div className="createpost-form">
-					{/* <div className="title">Create Post</div> */}
-
 					<div className="photo-select">
-						{/* <div className="input-container ic2">          */}
 						<InputField
 							type="file"
-							name="photo"
+							name="postImage"
 							id="photo"
-							// value={formValues.photos}
+							accept="image/png, image/gif, image/jpeg"
+							error={errorMessage.imageError}
 							handleChange={onImageChange}
 							label="Select a photo"
 						/>
-						<p className="errorPost">{formErrors.photo}</p>
 
 						{image ? (
 							<img
@@ -99,10 +192,9 @@ function CreatePost() {
 								src={image}
 								id="target"
 								alt="preview"
+								name="postImage"
 							/>
 						) : null}
-
-						{/* </div> */}
 					</div>
 
 					<div className="post-info">
@@ -111,33 +203,24 @@ function CreatePost() {
 								type="text"
 								name="location"
 								value={formValues.location}
-								handleChange={handleChange}
+								error={errorMessage.locationError}
+								handleChange={handleChangeLocation}
 								label="Location"
 							/>
 						</div>
-						<p className="errorPost">{formErrors.location}</p>
 
-						<div className="input-container ic2">
-							<InputField
-								type="text"
-								name="caption"
-								value={formValues.caption}
-								handleChange={handleChange}
-								label="Caption"
-							/>
-						</div>
-						<p className="errorPost">{formErrors.caption}</p>
-
-						<div className="input-container ic2">
+						<div className="input-container-for-post ic2">
 							<TextArea
-								row={2}
+								style={{
+									height: '30vh',
+								}}
+								row={5}
 								name="description"
 								value={formValues.description}
 								handleChange={handleChange}
-								label="Travel Description"
+								label="Description of place"
 							/>
 						</div>
-						<p className="errorPost">{formErrors.description}</p>
 
 						<div className="feed_container-latest_trip_div-button">
 							<Button
@@ -150,7 +233,7 @@ function CreatePost() {
 					</div>
 				</div>
 			</form>
-		</>
+		</div>
 	);
 }
 

@@ -6,6 +6,10 @@ import tripReducer from "./Trip.reducers";
 import transactionReducer from "./Transaction.reducer";
 import postReducer from "./postReducer";
 import plandataReducers from "./plandata.reducers";
+import addTripReducers from "./addTrip.reducers";
+import addExpenseReducer from "./expenseAdded.reducer";
+import liveUpdateReducer from "./liveUpdate.reducer";
+import planupdateReducer from "./planupdate.reducer";
 
 const store = configureStore({
   reducer: {
@@ -14,6 +18,10 @@ const store = configureStore({
     transaction: transactionReducer,
     post: postReducer,
     plans: plandataReducers,
+    liveUpdate: liveUpdateReducer,
+    addTrip: addTripReducers,
+    addExpense: addExpenseReducer,
+    updatePlan: planupdateReducer
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 });

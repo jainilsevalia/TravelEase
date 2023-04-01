@@ -90,7 +90,5 @@
     justify-content: center;
 }
 .popup-save-button{
-    display: flex;
-    justify-content: space-between;
     margin-top: 24px;
 }

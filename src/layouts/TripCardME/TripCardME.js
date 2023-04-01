@@ -1,6 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import "../TripCardME/TripCardME.styles.css";
 const TripCard = ({ props }) => {
+  const [showAll, setShowAll] = useState(false);
+  const toggleShowAll = () => {
+    setShowAll(!showAll);
+  };
+
   return (
     <>
       <div className="card-trip-me container_trip">
@@ -15,7 +20,15 @@ const TripCard = ({ props }) => {
         <br />
         <div>
           <span className="card-trip__description">
-            {props.tripDescription}
+            {showAll
+              ? props.tripDescription
+              : `${props.tripDescription.slice(0, 130)}......`}
+            <button
+              className="show_more_btn_in_description"
+              onClick={toggleShowAll}
+            >
+              {showAll ? "show less" : "show more"}
+            </button>
           </span>
         </div>
       </div>
