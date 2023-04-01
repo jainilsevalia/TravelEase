@@ -47,6 +47,7 @@ const ManageExpense = (props) => {
     props.setProgress(10);
     try {
       axios.get("/trip").then((response) => {
+        props.setProgress(50);
         setTripInformation(response.data.trips.reverse());
         setSelectedTripId(response.data.trips[0]?._id || "");
         dispatch(selectedTripCard(response.data.trips[0]?._id || ""));
