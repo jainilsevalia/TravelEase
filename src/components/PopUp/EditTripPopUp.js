@@ -49,7 +49,7 @@ const EditTripPopUp = (props) => {
         theme: "light",
       });
     }
-  }, []);
+  }, [props.selectedTripCard]);
 
   const handleSave = () => {
     setFormErrors(validate(formValues));

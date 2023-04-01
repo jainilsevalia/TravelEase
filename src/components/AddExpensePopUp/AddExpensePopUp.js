@@ -103,7 +103,6 @@ const AddExpensePopUp = (props) => {
           .then((response) => {
             console.log(response.data.sessionUrl);
             window.location = response.data.sessionUrl;
-            setFormValues(initialValues);
             setWantToPay(false);
             toast.success("Expense added successfully!!", {
               position: "top-right",
@@ -129,7 +128,7 @@ const AddExpensePopUp = (props) => {
         theme: "light",
       });
     }
-  }, [wantToPay]);
+  }, [wantToPay, currentExpenseId]);
 
   const dispatch = useDispatch();
 

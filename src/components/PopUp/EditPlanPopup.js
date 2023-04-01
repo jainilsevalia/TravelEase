@@ -1,219 +1,215 @@
-import React, { useState, useEffect } from 'react';
-import { Button, InputField } from '..';
-import '../PopUp/EditPlanPopup.styles.css';
-import TextArea from '../TextArea/TextArea';
-import { IoCloseCircleOutline } from 'react-icons/io5';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import moment from 'moment';
-import { useDispatch } from 'react-redux';
-import { changeUpdateStatus } from '../../redux/planupdate.reducer';
+import React, { useState, useEffect } from "react";
+import { Button, InputField } from "..";
+import "../PopUp/EditPlanPopup.styles.css";
+import TextArea from "../TextArea/TextArea";
+import { IoCloseCircleOutline } from "react-icons/io5";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import moment from "moment";
+import { useDispatch } from "react-redux";
+import { changeUpdateStatus } from "../../redux/planupdate.reducer";
 
 const EditPlanPopup = (props) => {
-	const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-	const initialValues = {
-		startDate: '',
-		endDate: '',
-		destination: '',
-		estimatedExpenses: '',
-		travelDescription: '',
-	};
+  const initialValues = {
+    startDate: "",
+    endDate: "",
+    destination: "",
+    estimatedExpenses: "",
+    travelDescription: "",
+  };
 
-	const [formValues, setFormValues] = useState(initialValues);
-	const [formErrors, setFormErrors] = useState({});
-	const [planDetails, setPlanDetails] = useState({});
-	const [isSubmit, setIsSubmit] = useState(false);
+  const [formValues, setFormValues] = useState(initialValues);
+  const [formErrors, setFormErrors] = useState({});
+  const [planDetails, setPlanDetails] = useState({});
 
-	const navigate = useNavigate();
+  const navigate = useNavigate();
 
-	const handleChange = (e) => {
-		const { name, value } = e.target;
-		setFormValues({ ...formValues, [name]: value });
-	};
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues({ ...formValues, [name]: value });
+  };
 
-	const handleSave = (e) => {
-		e.preventDefault();
-		setFormErrors(validate(formValues));
-		if (Object.keys(formErrors).length === 0) {
-			props.setTrigger(false);
+  const handleSave = (e) => {
+    e.preventDefault();
+    setFormErrors(validate(formValues));
+    if (Object.keys(formErrors).length === 0) {
+      props.setTrigger(false);
 
-			axios
-				.put(
-					`https://trip-ease-server.onrender.com/plan/update/${props.planId}`,
-					{
-						startDate:
-							formValues.startDate !== ''
-								? formValues.startDate
-								: planDetails.startDate,
-						endDate:
-							formValues.endDate !== ''
-								? formValues.endDate
-								: planDetails.endDate,
-						destination:
-							formValues.destination !== ''
-								? formValues.destination
-								: planDetails.destination,
-						estimatedExpenses:
-							formValues.estimatedExpenses !== ''
-								? formValues.estimatedExpenses
-								: planDetails.estimatedExpenses,
-						travelDescription:
-							formValues.travelDescription !== ''
-								? formValues.travelDescription
-								: planDetails.travelDescription,
-					},
-					{
-						headers: { 'Content-Type': 'application/json' },
-					}
-				)
-				.then((response) => {
-					if (response.data.status === 'ok') {
-						// dispatch(planUpdateId(response.data._id))
-						dispatch(changeUpdateStatus());
-						navigate('/plan');
-					}
-				})
-				.catch((error) => {
-					// alert(error)
-				});
-		}
-	};
+      axios
+        .put(
+          `https://trip-ease-server.onrender.com/plan/update/${props.planId}`,
+          {
+            startDate:
+              formValues.startDate !== ""
+                ? formValues.startDate
+                : planDetails.startDate,
+            endDate:
+              formValues.endDate !== ""
+                ? formValues.endDate
+                : planDetails.endDate,
+            destination:
+              formValues.destination !== ""
+                ? formValues.destination
+                : planDetails.destination,
+            estimatedExpenses:
+              formValues.estimatedExpenses !== ""
+                ? formValues.estimatedExpenses
+                : planDetails.estimatedExpenses,
+            travelDescription:
+              formValues.travelDescription !== ""
+                ? formValues.travelDescription
+                : planDetails.travelDescription,
+          },
+          {
+            headers: { "Content-Type": "application/json" },
+          }
+        )
+        .then((response) => {
+          if (response.data.status === "ok") {
+            // dispatch(planUpdateId(response.data._id))
+            dispatch(changeUpdateStatus());
+            navigate("/plan");
+          }
+        })
+        .catch((error) => {
+          // alert(error)
+        });
+    }
+  };
 
-	useEffect(() => {
-		async function myFunction() {
-			const response = await axios.get(
-				`https://trip-ease-server.onrender.com/plan/${props.planId}`
-			);
-			setPlanDetails(response.data);
-			setFormValues({
-				startDate: response.data.startDate,
-				endDate: response.data.endDate,
-				destination: response.data.destination,
-				estimatedExpenses: response.data.estimatedExpenses,
-				travelDescription: response.data.travelDescription,
-			});
-		}
+  useEffect(() => {
+    async function myFunction() {
+      const response = await axios.get(
+        `https://trip-ease-server.onrender.com/plan/${props.planId}`
+      );
+      setPlanDetails(response.data);
+      setFormValues({
+        startDate: response.data.startDate,
+        endDate: response.data.endDate,
+        destination: response.data.destination,
+        estimatedExpenses: response.data.estimatedExpenses,
+        travelDescription: response.data.travelDescription,
+      });
+    }
 
-		myFunction();
-	}, [props.planId]);
+    myFunction();
+  }, [props.planId]);
 
-	const validate = (values) => {
-		const errors = {};
-		const nameregex = /^[a-z ,.'-]+$/i;
-		const numRegex = /^[0-9]*$/i;
-		const dateRegex =
-			/^((0[1-9]|[1-2][0-9]|3[0-1])\/(0[1-9]|1[0-2])\/(202[3-9]))$/i;
+  const validate = (values) => {
+    const errors = {};
+    const nameregex = /^[a-z ,.'-]+$/i;
+    const numRegex = /^[0-9]*$/i;
+    const dateRegex =
+      /^((0[1-9]|[1-2][0-9]|3[0-1])\/(0[1-9]|1[0-2])\/(202[3-9]))$/i;
 
-		if (!dateRegex.test(values.startDate)) {
-			errors.startDate = 'Please enter a date in a format shown above';
-		}
+    if (!dateRegex.test(values.startDate)) {
+      errors.startDate = "Please enter a date in a format shown above";
+    }
 
-		if (!dateRegex.test(values.endDate)) {
-			errors.endDate = 'Please enter a date in a format shown above';
-		}
+    if (!dateRegex.test(values.endDate)) {
+      errors.endDate = "Please enter a date in a format shown above";
+    }
 
-		const startDateStr = values.startDate;
-		const endDateStr = values.endDate;
+    const startDateStr = values.startDate;
+    const endDateStr = values.endDate;
 
-		const dateFormat = 'DD/MM/YYYY';
+    const dateFormat = "DD/MM/YYYY";
 
-		const startDate = moment(startDateStr, dateFormat);
-		const endDate = moment(endDateStr, dateFormat);
+    const startDate = moment(startDateStr, dateFormat);
+    const endDate = moment(endDateStr, dateFormat);
 
-		if (!endDate.isSameOrAfter(startDate)) {
-			errors.endDate = 'End date should not be less than start date';
-		}
+    if (!endDate.isSameOrAfter(startDate)) {
+      errors.endDate = "End date should not be less than start date";
+    }
 
-		if (!nameregex.test(values.destination)) {
-			errors.destination = "Destination doesn't contain numbers";
-		}
+    if (!nameregex.test(values.destination)) {
+      errors.destination = "Destination doesn't contain numbers";
+    }
 
-		if (!numRegex.test(values.estimatedExpenses)) {
-			errors.estimatedExpenses = "Expense doesn't contains alaphabets";
-		}
+    if (!numRegex.test(values.estimatedExpenses)) {
+      errors.estimatedExpenses = "Expense doesn't contains alaphabets";
+    }
 
-		return errors;
-	};
+    return errors;
+  };
 
-	return props.trigger ? (
-		<div className="popup">
-			<div className="edit-plan-popup-inner">
-				<div className="popup-title">
-					<div className="card-trip-title__popup">
-						<span>Update plan</span>
-					</div>
-					<div
-						className="popup-button-close"
-						onClick={() => props.setTrigger(false)}
-					>
-						<IoCloseCircleOutline />
-					</div>
-				</div>
-				<hr />
-				<form
-					className="popup-input-list"
-					onSubmit={handleSave}
-				>
-					<div className="name-in-plan">
-						<InputField
-							type="text"
-							name="startDate"
-							value={formValues.startDate}
-							handleChange={handleChange}
-							label="Startdate"
-							placeholder={planDetails.startDate}
-							error={formErrors.startDate}
-						/>
-						<InputField
-							type="text"
-							name="endDate"
-							value={formValues.endDate}
-							handleChange={handleChange}
-							label="Enddate"
-							placeholder={planDetails.endDate}
-							error={formErrors.endDate}
-						/>
-					</div>
-					<InputField
-						type="text"
-						name="destination"
-						value={formValues.destination}
-						handleChange={handleChange}
-						label="Destination"
-						placeholder={planDetails.destination}
-						error={formErrors.destination}
-					/>
-					<InputField
-						type="text"
-						name="estimatedExpenses"
-						value={formValues.estimatedExpenses}
-						handleChange={handleChange}
-						label="Estimated Expense"
-						placeholder={planDetails.estimatedExpenses}
-						error={formErrors.estimatedExpenses}
-					/>
-					<TextArea
-						row={2}
-						name="travelDescription"
-						value={formValues.travelDescription}
-						handleChange={handleChange}
-						label="Travel Description"
-						placeholder={planDetails.travelDescription}
-					/>
+  return props.trigger ? (
+    <div className="popup">
+      <div className="edit-plan-popup-inner">
+        <div className="popup-title">
+          <div className="card-trip-title__popup">
+            <span>Update plan</span>
+          </div>
+          <div
+            className="popup-button-close"
+            onClick={() => props.setTrigger(false)}
+          >
+            <IoCloseCircleOutline />
+          </div>
+        </div>
+        <hr />
+        <form className="popup-input-list" onSubmit={handleSave}>
+          <div className="name-in-plan">
+            <InputField
+              type="text"
+              name="startDate"
+              value={formValues.startDate}
+              handleChange={handleChange}
+              label="Startdate"
+              placeholder={planDetails.startDate}
+              error={formErrors.startDate}
+            />
+            <InputField
+              type="text"
+              name="endDate"
+              value={formValues.endDate}
+              handleChange={handleChange}
+              label="Enddate"
+              placeholder={planDetails.endDate}
+              error={formErrors.endDate}
+            />
+          </div>
+          <InputField
+            type="text"
+            name="destination"
+            value={formValues.destination}
+            handleChange={handleChange}
+            label="Destination"
+            placeholder={planDetails.destination}
+            error={formErrors.destination}
+          />
+          <InputField
+            type="text"
+            name="estimatedExpenses"
+            value={formValues.estimatedExpenses}
+            handleChange={handleChange}
+            label="Estimated Expense"
+            placeholder={planDetails.estimatedExpenses}
+            error={formErrors.estimatedExpenses}
+          />
+          <TextArea
+            row={2}
+            name="travelDescription"
+            value={formValues.travelDescription}
+            handleChange={handleChange}
+            label="Travel Description"
+            placeholder={planDetails.travelDescription}
+          />
 
-					<Button
-						className="popup-update-button"
-						type="submit"
-						variant="blue"
-						name="Update"
-					/>
-				</form>
-			</div>
-		</div>
-	) : (
-		''
-	);
+          <Button
+            className="popup-update-button"
+            type="submit"
+            variant="blue"
+            name="Update"
+          />
+        </form>
+      </div>
+    </div>
+  ) : (
+    ""
+  );
 };
 
 export default EditPlanPopup;
