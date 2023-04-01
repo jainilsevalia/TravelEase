@@ -44,13 +44,13 @@ const ManageExpense = (props) => {
   }, [ref]);
 
   useEffect(() => {
-    // props.setProgress(10);
+    props.setProgress(10);
     try {
       axios.get("/trip").then((response) => {
         setTripInformation(response.data.trips.reverse());
         setSelectedTripId(response.data.trips[0]?._id || "");
         dispatch(selectedTripCard(response.data.trips[0]?._id || ""));
-        // props.setProgress(100);
+        props.setProgress(100);
       });
     } catch (err) {
       console.log(err);
@@ -60,11 +60,11 @@ const ManageExpense = (props) => {
 
   useEffect(() => {
     try {
-      // props.setProgress(10);
+      props.setProgress(10);
       axios.get(`/expense/${selectedTripId}`).then((response) => {
         setTransactionInformation(response.data.expense);
         dispatch(expenseAdded(""));
-        // props.setProgress(100);
+        props.setProgress(100);
       });
     } catch (err) {
       console.log(err);
