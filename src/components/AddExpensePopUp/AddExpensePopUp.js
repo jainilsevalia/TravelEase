@@ -21,13 +21,16 @@ const AddExpensePopUp = (props) => {
     transactionAmount: "",
   };
   const [formValues, setFormValues] = useState(initialValues);
+  // const [formErrors, setFormErrors] = useState();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
+    // handleError();
   };
 
   const handlePayExpense = () => {
+    // if (handleError()) return;
     axios
       .post("/expense/add", {
         tripId: selectedTripId.tripIdSelected,
@@ -68,6 +71,20 @@ const AddExpensePopUp = (props) => {
     setFormValues(initialValues);
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    switch (e.nativeEvent.submitter.name) {
+      case "Save":
+        handleTransactionSave();
+        break;
+      case "Pay":
+        handlePayExpense();
+        break;
+      default:
+        break;
+    }
+  };
+
   useEffect(() => {
     try {
       if (wantToPay) {
@@ -90,6 +107,9 @@ const AddExpensePopUp = (props) => {
               progress: undefined,
               theme: "light",
             });
+          })
+          .catch((err) => {
+            setWantToPay(false);
           });
       }
     } catch (err) {
@@ -108,8 +128,25 @@ const AddExpensePopUp = (props) => {
 
   const dispatch = useDispatch();
 
-  const handleTransactionSave = (e) => {
-    e.preventDefault();
+  // const handleError = () => {
+  //   const requiredMsg = "This field is mandatory";
+  //   const { transactionName, transactionAmount } = formValues;
+  //   let isError = true;
+  //   if (!transactionName) {
+  //     setFormErrors({ ...formErrors, transactionName: requiredMsg });
+  //   } else if (!transactionAmount) {
+  //     setFormErrors({ ...formErrors, transactionAmount: requiredMsg });
+  //   } else if (transactionAmount && isNaN(Number(transactionAmount))) {
+  //     setFormErrors({ ...formErrors, transactionAmount: "Invalid number" });
+  //   } else {
+  //     setFormErrors();
+  //     isError = false;
+  //   }
+  //   return isError;
+  // };
+
+  const handleTransactionSave = () => {
+    // if (handleError()) return;
     axios
       .post("/expense/add", {
         tripId: selectedTripId.tripIdSelected,
@@ -162,26 +199,31 @@ const AddExpensePopUp = (props) => {
           </div>
         </div>
         <hr />
-        <div className="popup-input-list">
+        <form className="popup-input-list" onSubmit={handleSubmit}>
           <InputField
             label="Expense Name"
             id="Expense Name"
             type="text"
             name="transactionName"
+            required
             handleChange={handleChange}
+            // error={formErrors?.transactionName}
           />
           <InputField
             label="Expense Amount"
             id="Expense Amount"
             type="text"
             name="transactionAmount"
+            required
+            pattern="^[0-9]*$"
             handleChange={handleChange}
+            // error={formErrors?.transactionAmount}
           />
-        </div>
-        <div className="popup-save-and-pay-button">
-          <Button variant="blue" name="Save" onClick={handleTransactionSave} />
-          <Button variant="blue" name="Pay" onClick={handlePayExpense} />
-        </div>
+          <div className="popup-save-and-pay-button">
+            <Button type="submit" variant="blue" name="Save" />
+            <Button type="submit" variant="blue" name="Pay" />
+          </div>
+        </form>
         {props.children}
       </div>
     </div>
