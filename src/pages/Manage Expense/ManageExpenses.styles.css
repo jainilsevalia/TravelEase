@@ -23,7 +23,7 @@ body{
 
 .expense-main-container{
     display: grid;
-    height: 100vh;
+    height: 90vh;
     overflow: hidden;
     grid-template-columns: 30% 1fr;
 }
@@ -60,7 +60,6 @@ body{
         overflow: scroll;
         grid-template-columns: 1fr;
     }
-
 }
 .expense-left-container__title-bar{
     display: flex;
@@ -85,7 +84,7 @@ body{
 }
 .expense-left-container__trip-list{
     margin: 20px;
-    height: 100vh;
+    height: 80vh;
     overflow: scroll;
     margin-bottom: 50px;
 }
@@ -139,8 +138,9 @@ body{
 
 .expense-right-container__transaction{
     margin: 20px;
-    height: 50vh;
+    height: 30vh;
     overflow: scroll;
+    /* border-bottom: black ; */
 }
 
 .expense-right-container__transaction::-webkit-scrollbar{
