@@ -1,3 +1,5 @@
+//Author: Jay Ramani(jy948858@dal.ca) || Banner Id : B00911903
+
 import React, { useState, useEffect } from 'react';
 import './CreatePlan.css';
 import '../../../components/Navbar/Navbar';
@@ -19,8 +21,10 @@ function Plan() {
 		estimatedExpenses: '',
 		travelDescription: '',
 	};
+
+
 	const [formValues, setFormValues] = useState(initialValues);
-	const [formErrors, setFormErrors] = useState({});
+	const [formErrors, setFormErrors] = useState(initialValues);
 	const [isSubmit, setIsSubmit] = useState(false);
 	const [errorCheck, setErrorCheck] = useState(false);
 	const navigate = useNavigate();
@@ -77,7 +81,7 @@ function Plan() {
 						}
 					})
 					.catch((error) => {
-						alert(error);
+						// alert(error);
 					});
 			})();
 		}

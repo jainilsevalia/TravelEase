@@ -1,3 +1,5 @@
+/* Author: Jainil Sevalia(jn498899@dal.ca) || Banner Id: B00925445 */
+
 .dynamic-button[variant="blue"]{
     background-color:#0D6EFD; 
     color: white;
@@ -7,6 +9,16 @@
     padding: 8px 12px;
     cursor: pointer;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.dynamic-button[variant="grey"] {
+    background-color: #E5E5E5;
+    color: black;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    padding: 4px 18px;
+    cursor: pointer;
 }
 
 .dynamic-button[variant="transparent"]{

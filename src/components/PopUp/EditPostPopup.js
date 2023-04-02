@@ -29,6 +29,8 @@ function EditPostPopup(props) {
 	const handleChangeDescription = (e) => {
 		setDescription(validateDescription(e.target.value));
 	};
+
+	// validate location entered by user
 	const validateLocation = (value) => {
 		if (value === '') {
 			setErrorMessage({
@@ -45,6 +47,8 @@ function EditPostPopup(props) {
 		}
 		return value;
 	};
+
+	// validate location entered by user
 	const validateDescription = (value) => {
 		if (value === '') {
 			setErrorMessage({
@@ -59,6 +63,7 @@ function EditPostPopup(props) {
 	};
 
 	useEffect(() => {
+		// Load all posts from database
 		const getPostData = () => {
 			axios
 				.get(
@@ -72,6 +77,7 @@ function EditPostPopup(props) {
 		getPostData();
 	}, [props.postId]);
 
+	// update post in database and redux state
 	const handleupdatePost = () => {
 		if (!errorMessage.locationError && !errorMessage.descriptionError) {
 			axios

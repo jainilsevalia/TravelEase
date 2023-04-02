@@ -95,6 +95,7 @@ function CreatePost() {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
+		// check all fields are validated and no error found, then create post
 		if (isImageValidated && isLocationValidated) {
 			if (
 				errorMessage.locationError === '' &&

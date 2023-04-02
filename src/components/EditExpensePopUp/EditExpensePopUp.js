@@ -1,3 +1,5 @@
+//Author: Jainil Sevalia(jn498899@dal.ca) || Banner Id: B00925445
+
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Button, InputField } from "..";
@@ -5,6 +7,7 @@ import "./EditExpensePopUp.styles.css";
 import { axios } from "../../utils/axios";
 import { expenseAdded } from "../../redux/expenseAdded.reducer";
 import { toast } from "react-toastify";
+import { IoCloseCircleOutline } from "react-icons/io5";
 
 const EditExpensePopUp = (props) => {
   const dispatch = useDispatch();
@@ -14,7 +17,7 @@ const EditExpensePopUp = (props) => {
     transactionAmount: "",
   };
   const [formValues, setFormValues] = useState(initialValues);
-  const [formErrors, setFormErrors] = useState(initialValues);
+  const [formErrors, setFormErrors] = useState({});
   const [errorCheck, setErrorCheck] = useState(false);
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -119,18 +122,19 @@ const EditExpensePopUp = (props) => {
 
   return props.trigger ? (
     <div className="popup">
-      <div className="popup-inner">
-        <div className="popup-button-close">
-          <div className="">
-            <span className="card-trip-title__popup">Edit Expense</span>
+      <div className="add-expense-popup-inner">
+        <div className="popup-title">
+          <div className="card-trip-title__popup">
+            <span>Add Expense</span>
           </div>
-          <Button
-            className="close-btn dynamic-button"
-            variant="transparent"
-            name="Close"
+          <div
+            className="popup-button-close"
             onClick={() => props.setTrigger(false)}
-          />
+          >
+            <IoCloseCircleOutline />
+          </div>
         </div>
+        <hr />
         <div className="popup-input-list">
           <InputField
             label="Expense Name"

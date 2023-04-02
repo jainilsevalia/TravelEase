@@ -1,3 +1,6 @@
+//Author: Jay Ramani(jy948858@dal.ca) || Banner Id : B00911903
+
+
 import { configureStore } from "@reduxjs/toolkit";
 import logger from "redux-logger";
 
@@ -7,6 +10,7 @@ import transactionReducer from "./Transaction.reducer";
 import postReducer from "./postReducer";
 import plandataReducers from "./plandata.reducers";
 import addTripReducers from "./addTrip.reducers";
+import editTripReducers from "./editTrip.reducers";
 import addExpenseReducer from "./expenseAdded.reducer";
 import liveUpdateReducer from "./liveUpdate.reducer";
 import planupdateReducer from "./planupdate.reducer";
@@ -21,7 +25,8 @@ const store = configureStore({
     liveUpdate: liveUpdateReducer,
     addTrip: addTripReducers,
     addExpense: addExpenseReducer,
-    updatePlan: planupdateReducer
+    updatePlan: planupdateReducer,
+    editTrip: editTripReducers,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 });

@@ -21,6 +21,9 @@ import './Profile.css';
 const Profile = () => {
 	const dispatch = useDispatch();
 	useEffect(() => {
+		// fetch all posts of particular users
+		// Also code included if I would have got user data from user authentication
+		// Therefore added static data of user
 		axios
 			.get(`https://trip-ease-server.onrender.com/post/view/${123}`)
 			// .get(`https://trip-ease-server.onrender.com/post/view/${props.userId}`)

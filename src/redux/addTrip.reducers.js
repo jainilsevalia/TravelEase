@@ -1,3 +1,5 @@
+//Author: Jainil Sevalia(jn498899@dal.ca) || Banner Id: B00925445
+
 import { createSlice } from "@reduxjs/toolkit";
 
 const addTripSlice = createSlice({

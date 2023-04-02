@@ -1,3 +1,5 @@
+//Author: Jainil Sevalia(jn498899@dal.ca) || Banner Id: B00925445
+
 import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { axios } from "../../utils/axios";
@@ -6,8 +8,6 @@ import { toast } from "react-toastify";
 const CancelPay = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  //   const transactionId = useSelector((store) => store.addExpense.expenseAdded);
-  console.log(id);
   useEffect(() => {
     axios.delete(`/expense/delete/${id}`).then((response) => {
       if (response.data.success) {

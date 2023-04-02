@@ -1,3 +1,5 @@
+//Author: Jainil Sevalia(jn498899@dal.ca) || Banner Id: B00925445
+
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "../Button/ButtonComp";
@@ -7,6 +9,7 @@ import { addTransaction } from "../../redux/Transaction.reducer";
 import { axios } from "../../utils/axios";
 import { expenseAdded } from "../../redux/expenseAdded.reducer";
 import { toast } from "react-toastify";
+import { IoCloseCircleOutline } from "react-icons/io5";
 
 const AddExpensePopUp = (props) => {
   const selectedTripId = useSelector((store) => store.sample);
@@ -18,7 +21,7 @@ const AddExpensePopUp = (props) => {
     transactionAmount: "",
   };
   const [formValues, setFormValues] = useState(initialValues);
-  const [formErrors, setFormErrors] = useState(initialValues);
+  const [formErrors, setFormErrors] = useState({});
   const [errorCheck, setErrorCheck] = useState(false);
 
   const handleChange = (e) => {
@@ -103,6 +106,7 @@ const AddExpensePopUp = (props) => {
           .then((response) => {
             console.log(response.data.sessionUrl);
             window.location = response.data.sessionUrl;
+            setFormValues(initialValues);
             setWantToPay(false);
             toast.success("Expense added successfully!!", {
               position: "top-right",
@@ -128,14 +132,17 @@ const AddExpensePopUp = (props) => {
         theme: "light",
       });
     }
-  }, [wantToPay, currentExpenseId]);
+  }, [wantToPay]);
 
   const dispatch = useDispatch();
 
-  const handleTransactionSave = () => {
+  const handleTransactionSave = (e) => {
+    e.preventDefault();
     setFormErrors(validate(formValues));
+    console.log("-----");
     setErrorCheck(true);
     if (Object.keys(formErrors).length === 0) {
+      console.log(Object.keys(formErrors).length);
       props.setTrigger(false);
       axios
         .post("/expense/add", {
@@ -177,23 +184,19 @@ const AddExpensePopUp = (props) => {
 
   return props.trigger ? (
     <div className="popup">
-      <div className="popup-inner">
-        <div className="popup-button-close">
-          <div className="">
-            <span className="card-trip-title__popup">New Expense</span>
+      <div className="add-expense-popup-inner">
+        <div className="popup-title">
+          <div className="card-trip-title__popup">
+            <span>Add Expense</span>
           </div>
-          <Button
-            className="close-btn dynamic-button"
-            variant="transparent"
-            name="Close"
-            onClick={() => {
-              props.setTrigger(false);
-              setFormValues(initialValues);
-              setFormErrors(initialValues);
-              setErrorCheck(false);
-            }}
-          />
+          <div
+            className="popup-button-close"
+            onClick={() => props.setTrigger(false)}
+          >
+            <IoCloseCircleOutline />
+          </div>
         </div>
+        <hr />
         <div className="popup-input-list">
           <InputField
             label="Expense Name"
@@ -212,7 +215,7 @@ const AddExpensePopUp = (props) => {
             error={formErrors.transactionAmount}
           />
         </div>
-        <div className="popup-save-button">
+        <div className="popup-save-and-pay-button">
           <Button variant="blue" name="Save" onClick={handleTransactionSave} />
           <Button variant="blue" name="Pay" onClick={handlePayExpense} />
         </div>

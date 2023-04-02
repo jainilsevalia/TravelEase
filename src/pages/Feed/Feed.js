@@ -17,11 +17,13 @@ const Feed = () => {
 	const dispatch = useDispatch();
 	const [recentTrip, setRecentTrip] = useState([]);
 	useEffect(() => {
+		// fetch all posts from database
 		axios
 			.get(`https://trip-ease-server.onrender.com/post/view`)
 			.then(function (response) {
 				dispatch(createPost(response.data));
 			});
+		// detch all live updates from database
 		axios
 			.get(`https://trip-ease-server.onrender.com/liveupdate/view`)
 			.then(function (response) {

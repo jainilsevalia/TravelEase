@@ -8,6 +8,7 @@ const postSlice = createSlice({
 		postData: [],
 	},
 	reducers: {
+		// create,update and delete redux state and save data coming from database
 		createPost: (state, action) => {
 			state.postData = action.payload;
 		},

@@ -1,3 +1,5 @@
+//Author: Jainil Sevalia(jn498899@dal.ca) || Banner Id: B00925445
+
 export { default as CreateLiveUpdates } from "./Create/LiveUpdates/Create.LiveUpdates";
 export { default as Post } from "./Create/Post/Create.Post";
 export { default as Plan } from "./Create/Plan/Create.Plan";

@@ -1,3 +1,5 @@
+//Author: Jay Ramani(jy948858@dal.ca) || Banner Id : B00911903
+
 import React, { useState } from "react";
 import {
   CreateLiveUpdates,
@@ -51,7 +53,7 @@ function App() {
         />
         <Route path={Path.CREATE_PLAN} element={<Plan />} />
         <Route path={Path.PROFILE_PAGE} element={<Profile />} />
-        <Route path={Path.ALL_PLAN} element={<AllPlan />} />
+        <Route path={Path.ALL_PLAN} element={<AllPlan setProgress={setProgress}/>} />
         <Route path={Path.MY_PLAN} element={<MyPlan />} />
         <Route path={Path.CANCEL_PAY} element={<CancelPay />} />
       </Routes>

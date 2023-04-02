@@ -1,3 +1,5 @@
+//Author: Jainil Sevalia(jn498899@dal.ca) || Banner Id: B00925445
+
 import React, { useState, useEffect, useRef } from "react";
 import "../Manage Expense/ManageExpenses.styles.css";
 import Transaction from "../../layouts/TransactionDetails/Transaction";
@@ -14,10 +16,14 @@ import EditTripPopUp from "../../components/PopUp/EditTripPopUp";
 import { toast } from "react-toastify";
 
 const ManageExpense = (props) => {
-  const expenseAddedState = useSelector((store) => store.addExpense);
-  const tripAddedState = useSelector((store) => store.addTrip);
+  const expenseAddedState = useSelector(
+    (store) => store.addExpense.expenseAdded
+  );
+  const tripAddedState = useSelector((store) => store.addTrip.tripAdded);
+  const tripEditedState = useSelector((store) => store.editTrip.tripEdited);
 
   const [popupVisible, setPopupVisible] = useState(false);
+  const [selectedTripId, setSelectedTripId] = useState("");
   const [editPopupVisible, setEditPopupVisible] = useState(false);
   const [popupVisibleForAddExpense, setPopupVisibleForAddExpense] =
     useState(false);
@@ -27,14 +33,52 @@ const ManageExpense = (props) => {
 
   const [tripInformation, setTripInformation] = useState([]);
   const [transactionInformation, setTransactionInformation] = useState([]);
+  const [selectedInformation, setSelectedInformation] = useState();
+  console.log("selectedInformation :>> ", selectedInformation);
 
   const dispatch = useDispatch();
 
   const handleTripClick = (idSelected) => {
+    console.log("idSelected :>> ", idSelected);
     setSelectedTripId(idSelected);
     setRef(true);
     dispatch(selectedTripCard(idSelected));
+    try {
+      axios.get(`/trip/get/${selectedTripId}`).then((response) => {
+        setSelectedInformation(response.data.trip);
+      });
+    } catch (err) {
+      toast.error("Something went wrong!! Try again!!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
   };
+
+  useEffect(() => {
+    try {
+      axios.get(`/trip/get/${selectedTripId}`).then((response) => {
+        setSelectedInformation(response.data.trip);
+      });
+    } catch (err) {
+      toast.error("Something went wrong!! Try again!!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
+  }, [selectedTripId]);
 
   useEffect(() => {
     if (ref === true) {
@@ -47,7 +91,6 @@ const ManageExpense = (props) => {
     props.setProgress(10);
     try {
       axios.get("/trip").then((response) => {
-        props.setProgress(50);
         setTripInformation(response.data.trips.reverse());
         setSelectedTripId(response.data.trips[0]?._id || "");
         dispatch(selectedTripCard(response.data.trips[0]?._id || ""));
@@ -57,8 +100,27 @@ const ManageExpense = (props) => {
       console.log(err);
     }
   }, [tripAddedState, dispatch, expenseAddedState]);
-  const [selectedTripId, setSelectedTripId] = useState("");
-
+  useEffect(() => {
+    props.setProgress(10);
+    try {
+      axios.get("/trip").then((response) => {
+        setTripInformation(response.data.trips.reverse());
+        setSelectedTripId(
+          tripEditedState ? tripEditedState : response.data.trips[0]?._id || ""
+        );
+        dispatch(
+          selectedTripCard(
+            tripEditedState
+              ? tripEditedState
+              : response.data.trips[0]?._id || ""
+          )
+        );
+        props.setProgress(100);
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }, [tripEditedState]);
   useEffect(() => {
     try {
       props.setProgress(10);
@@ -90,7 +152,7 @@ const ManageExpense = (props) => {
       axios.delete(`/trip/delete/${selectedTripId}`).then((response) => {
         try {
           if (response.data.success) {
-            setSelectedTripId("");
+            setSelectedTripId(tripInformation[0]._id);
             dispatch(tripAdded(""));
             toast.success("Trip Deleted successfully!!", {
               position: "top-right",
@@ -183,7 +245,7 @@ const ManageExpense = (props) => {
                   />
                   {editPopupVisible ? (
                     <EditTripPopUp
-                      selectedTripCard={selectedTripId}
+                      selectedTripCard={selectedInformation}
                       trigger={editPopupVisible}
                       setTrigger={setEditPopupVisible}
                     />

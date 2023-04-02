@@ -1,3 +1,5 @@
+/* Author: Jainil Sevalia(jn498899@dal.ca) || Banner Id: B00925445 */
+
 :root {
 	--black: rgba(0, 0, 0, 1);
 	--bunting: rgba(12, 28, 70, 1);
@@ -25,11 +27,21 @@
 }
 
 .popup-inner {
-	position: relative;
-	padding: 32px;
-	max-width: 640px;
+	
 	background-color: #fff;
 	border-radius: 12px;
+	padding: 16px 32px 16px 32px;
+	width: 30vw;
+	margin: auto;
+	display:flex;
+	flex-direction: column;
+
+}
+
+.popup-title{
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .avatar-container {
@@ -106,5 +118,91 @@
 	justify-content: center;
 }
 .popup-save-button {
-	margin-top: 24px;
+	box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    font-family: Montserrat, sans-serif;
+    font-size: .9em;
+    margin: 5px;
+    
+    text-align: center;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+}
+
+.budget-and-date{
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+}
+
+hr{
+	margin: 10px auto;
+	width:100%;
+	border-top: 1px solid #6d757A;
+}
+
+@media (max-width: 1220px){
+    /* .budget-and-date{
+        display: flex;
+        flex-direction: column;
+        width:100%;
+    } */
+    .popup-inner{
+		width: 38vw;
+    }
+}
+@media (max-width: 1060px){
+    /* .budget-and-date{
+        display: flex;
+        flex-direction: column;
+        width:100%;
+    } */
+    .popup-inner{
+		width: 44vw;
+    }
+}
+
+@media (max-width: 900px){
+    /* .budget-and-date{
+        display: flex;
+        flex-direction: column;
+        width:100%;
+    } */
+    .popup-inner{
+		width: 52vw;
+    }
+}
+
+
+@media (max-width: 750px) {
+	.budget-and-date{
+        display: flex;
+        flex-direction: column;
+        width:100%;
+	 }
+    .popup-inner{
+    width: 58vw;
+}
+}
+
+@media (max-width: 600px) {
+    .popup-inner {
+        width: 66vw;
+    }
+}
+
+@media (max-width: 450px) {
+	
+    .popup-inner {
+        width: 72vw;
+    }
+}
+
+@media (max-width: 450px) {
+    .popup-inner {
+        width: 80vw;
+        
+    }
 }

@@ -26,6 +26,7 @@ const Post = (props) => {
 		setShowAll(!showAll);
 	}
 
+	// delete post from database
 	function deleteFunction() {
 		return function () {
 			let message = 'Confirm delete?';
@@ -96,6 +97,7 @@ const Post = (props) => {
 					<div className="post_description_user">
 						<div className="user_name_and_description">
 							<div>
+								{/* slice description and put show more button */}
 								{showAll
 									? props.description
 									: `${props.description.slice(0, 200)}....`}
@@ -163,6 +165,7 @@ const Post = (props) => {
 					<div className="post_description">
 						<div className="user_name_and_description">
 							<div>
+								{/* slice description and put show more button */}
 								{showAll
 									? props.description
 									: `${props.description.slice(0, 260)}...`}

@@ -8,6 +8,7 @@ const liveUpdateSlice = createSlice({
 		liveUpdatesData: [],
 	},
 	reducers: {
+		// create redux state and save data coming from database
 		createLiveUpdate: (state, action) => {
 			state.liveUpdatesData = action.payload;
 		},

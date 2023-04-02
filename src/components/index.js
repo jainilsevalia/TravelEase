@@ -1,3 +1,5 @@
+//Author: Jainil Sevalia(jn498899@dal.ca) || Banner Id: B00925445
+
 export { default as Navbar } from "./Navbar/Navbar";
 export { default as ProfilePic } from "./ProfilePic/ProfilePic";
 export { default as LiveUpdateImage } from "./LiveUpdateImage/liveUpdateImage";

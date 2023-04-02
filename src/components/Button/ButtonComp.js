@@ -1,3 +1,5 @@
+//Author: Jainil Sevalia(jn498899@dal.ca) || Banner Id: B00925445
+
 import React from "react";
 import "../Button/ButtonComp.styles.css";
 

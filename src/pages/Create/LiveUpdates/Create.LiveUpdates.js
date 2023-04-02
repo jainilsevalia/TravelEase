@@ -27,6 +27,7 @@ const CreateLiveUpdates = () => {
 	const navigate = useNavigate();
 
 	const onImageChange = (e) => {
+		// create url of uploaded image to show it on the same page
 		const imageUrl = validateImage(URL.createObjectURL(e.target.files[0]));
 		setImage(imageUrl);
 		setFormValues((prevState) => ({
@@ -44,7 +45,9 @@ const CreateLiveUpdates = () => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
+		// check there are no errors and create live update
 		if (errorMessage === '' && image !== undefined) {
+			console.log('liveupdate create api called');
 			axios
 				.post(
 					'https://trip-ease-server.onrender.com/liveUpdate/create',
@@ -96,7 +99,7 @@ const CreateLiveUpdates = () => {
 
 	return (
 		<div className="create_live_update_div_outer_div">
-			<div className="Live-update-title">Add Live Updates</div>
+			<div className="Live-update-title">Create Live Updates</div>
 
 			<form
 				onSubmit={handleSubmit}

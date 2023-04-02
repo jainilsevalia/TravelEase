@@ -1,13 +1,9 @@
+//Author: Jainil Sevalia(jn498899@dal.ca) || Banner Id: B00925445
+
 import React, { useState } from "react";
 import "./TextArea.styles.scss";
 
-const TextArea = ({
-  label,
-  id,
-  handleChange,
-  error,
-  ...otherProps
-}) => {
+const TextArea = ({ label, id, handleChange, error, ...otherProps }) => {
   const [isFilled, setIsFilled] = useState(false);
 
   return (

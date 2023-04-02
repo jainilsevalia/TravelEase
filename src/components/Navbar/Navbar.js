@@ -1,3 +1,5 @@
+//Author: Jay Ramani(jy948858@dal.ca) || Banner Id : B00911903
+
 import { Link, useLocation } from 'react-router-dom';
 import './Navbar.css';
 import { FaSearch } from 'react-icons/fa';
@@ -52,43 +54,6 @@ function NavbarFun() {
 							className={Mobile ? 'navlinks-mobile' : 'navlinks'}
 							onClick={() => setMobile(false)}
 						>
-							{/* <Link
-								to={Path.HOME}
-								className={`${
-									location.pathname === Path.HOME
-										? 'active-tab'
-										: 'inActive-tab'
-								}`}
-							>
-								Feed
-							</Link>
-							<Link
-								to={Path.MANAGE_EXPENSES}
-								className={`${
-									location.pathname === '/manageExpense'
-										? 'active-tab'
-										: 'inActive-tab'
-								}`}
-							>
-								Expense
-							</Link>
-							<Link
-								to={Path.MESSAGE}
-								className={`${
-									location.pathname === Path.MESSAGE
-										? 'active-tab'
-										: 'inActive-tab'
-								}`}
-							>
-								Message
-							</Link> */}
-
-							{/* <Link
-							to={Path.ALL_PLAN}
-							className={`${
-								location.pathname === Path.ALL_PLAN ? "active-tab" : "inActive-tab"
-							}`}
-						> */}
 							<Link
 								to={Path.HOME}
 								className={`${

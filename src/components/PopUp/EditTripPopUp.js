@@ -1,11 +1,16 @@
+//Author: Jainil Sevalia(jn498899@dal.ca) || Banner Id: B00925445
+
 import React, { useEffect, useState } from "react";
 import { Button, InputField } from "..";
 import "./EditTripPopUp.styles.css";
 import TextArea from "../TextArea/TextArea";
 import { axios } from "../../utils/axios";
 import { useDispatch } from "react-redux";
-import { tripAdded } from "../../redux/addTrip.reducers";
+import { tripEdited } from "../../redux/editTrip.reducers";
 import { toast } from "react-toastify";
+import { IoCloseCircleOutline } from "react-icons/io5";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 const EditTripPopUp = (props) => {
   const dispatch = useDispatch();
@@ -15,10 +20,11 @@ const EditTripPopUp = (props) => {
     tripDescription: "",
     tripDate: "",
     initialBudget: "",
-    totalExpense: 0,
+    // totalExpense: 0,
   };
 
   const [formValues, setFormValues] = useState(initialValues);
+  console.log("formValues :>> ", props);
   const [formErrors, setFormErrors] = useState(initialValues);
   const [errorCheck, setErrorCheck] = useState(false);
   const handleChange = (e) => {
@@ -49,7 +55,66 @@ const EditTripPopUp = (props) => {
         theme: "light",
       });
     }
-  }, [props.selectedTripCard]);
+  }, []);
+
+  const validationSchema = Yup.object({
+    tripName: Yup.string().required(),
+    tripDescription: Yup.string().required(),
+    tripDate: Yup.string().required(),
+    initialBudget: Yup.number("Expense doesn't contains alaphabets").required(
+      "Estimated Expanses Details is required"
+    ),
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      tripName: props?.selectedTripCard?.tripName,
+      tripDescription: props?.selectedTripCard?.tripDescription,
+      tripDate: props?.selectedTripCard?.tripDate,
+      initialBudget: props?.selectedTripCard?.initialBudget,
+      totalExpense: props?.selectedTripCard?.totalExpense,
+    },
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      try {
+        axios
+          .patch(`/trip/update/${props.selectedTripCard._id}`, {
+            // TODO: Remove user ID
+            userId: "64147ef19c2f3ba112246a4f",
+            tripName: values.tripName,
+            tripDescription: values.tripDescription,
+            tripDate: values.tripDate,
+            initialBudget: values.initialBudget,
+          })
+          .then((response) => {
+            props.setTrigger(false);
+            formik.resetForm();
+            dispatch(tripEdited(response.data.updateTrip._id));
+            toast.success("Trip added successfully!!", {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
+          });
+      } catch (err) {
+        toast.error("Something went wrong!! Try again!!", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+    },
+  });
 
   const handleSave = () => {
     setFormErrors(validate(formValues));
@@ -69,7 +134,7 @@ const EditTripPopUp = (props) => {
           .then((response) => {
             if (response.data.success) {
               setFormValues(initialValues);
-              dispatch(tripAdded(response.data.updateTrip._id));
+              dispatch(tripEdited(response.data.updateTrip._id));
               setFormErrors(initialValues);
               setErrorCheck(false);
               toast.success("Trip Edited successfully!!", {
@@ -138,58 +203,73 @@ const EditTripPopUp = (props) => {
   return props.trigger ? (
     <div className="popup">
       <div className="popup-inner">
-        <div className="popup-button-close">
-          <div className="">
-            <span className="card-trip-title__popup">Update Trip</span>
+        <div className="popup-title">
+          <div className="card-trip-title__popup">
+            <span>Update Trip</span>
           </div>
-          <Button
-            className="close-btn"
-            variant="transparent"
-            name="Close"
+          <div
+            className="popup-button-close"
             onClick={() => props.setTrigger(false)}
-          />
+          >
+            <IoCloseCircleOutline />
+          </div>
         </div>
-        <div className="popup-input-list">
-          <InputField
-            label="Trip Name"
-            id="Trip Name"
-            type="text"
-            name="tripName"
-            value={formValues.tripName}
-            handleChange={handleChange}
-            error={formErrors.tripName}
-          />
-          <TextArea
-            label="Trip Description"
-            id="Trip Description"
-            type="text"
-            name="tripDescription"
-            value={formValues.tripDescription}
-            handleChange={handleChange}
-            error={formErrors.tripDescription}
-          />
-          <InputField
-            label="Intial Budget"
-            id="Intial Budget"
-            type="text"
-            name="initialBudget"
-            value={formValues.initialBudget}
-            handleChange={handleChange}
-            error={formErrors.initialBudget}
-          />
-          <InputField
-            label="Date"
-            id="Date"
-            type="text"
-            name="tripDate"
-            value={formValues.tripDate}
-            handleChange={handleChange}
-            error={formErrors.tripDate}
-          />
-        </div>
-        <div className="popup-save-button">
-          <Button variant="blue" name="Save" onClick={handleSave} />
-        </div>
+        <hr />
+        <form onSubmit={formik.handleSubmit}>
+          <div className="popup-input-list">
+            <InputField
+              label="Trip Name"
+              id="Trip Name"
+              type="text"
+              name="tripName"
+              handleChange={formik.handleChange}
+              value={formik.values.tripName}
+              error={Boolean(formik.touched.tripName) && formik.errors.tripName}
+            />
+            <TextArea
+              label="Trip Description"
+              id="Trip Description"
+              type="text"
+              name="tripDescription"
+              value={formik.values.tripDescription}
+              handleChange={formik.handleChange}
+              row={5}
+              error={
+                Boolean(formik.touched.tripDescription) &&
+                formik.errors.tripDescription
+              }
+            />
+            <div className="budget-and-date">
+              <InputField
+                label="Initial Budget"
+                id="Intial Budget"
+                type="text"
+                name="initialBudget"
+                handleChange={formik.handleChange}
+                value={formik.values.initialBudget}
+                error={
+                  Boolean(formik.touched.initialBudget) &&
+                  formik.errors.initialBudget
+                }
+              />
+              <InputField
+                label="Date"
+                id="Date"
+                type="date"
+                name="tripDate"
+                min={new Date()}
+                handleChange={formik.handleChange}
+                value={formik.values.tripDate}
+                error={
+                  Boolean(formik.touched.tripDate) && formik.errors.tripDate
+                }
+              />
+            </div>
+          </div>
+          <div className="popup-save-button">
+            <Button variant="blue" name="Save" type="submit" />
+          </div>
+        </form>
       </div>
     </div>
   ) : (
