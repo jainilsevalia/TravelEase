@@ -21,79 +21,51 @@ const AddExpensePopUp = (props) => {
     transactionAmount: "",
   };
   const [formValues, setFormValues] = useState(initialValues);
-  const [formErrors, setFormErrors] = useState({});
-  const [errorCheck, setErrorCheck] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
   };
 
-  useEffect(() => {
-    if (errorCheck) {
-      setFormErrors(validate(formValues));
-    }
-  }, [errorCheck, formValues]);
-
   const handlePayExpense = () => {
-    setFormErrors(validate(formValues));
-    setErrorCheck(true);
-    if (Object.keys(formErrors).length === 0) {
-      props.setTrigger(false);
-      axios
-        .post("/expense/add", {
-          tripId: selectedTripId.tripIdSelected,
-          transactionName: formValues.transactionName,
-          transactionAmount: formValues.transactionAmount,
-        })
-        .then((response) => {
-          if (response.data.success) {
-            dispatch(expenseAdded(response.data.expense._id));
-            setWantToPay(true);
-            setCurrentExpenseId(response.data.expense._id);
-            setFormValues(initialValues);
-            setFormErrors(initialValues);
-            setErrorCheck(false);
-            toast.success("Expense added successfully!!", {
-              position: "top-right",
-              autoClose: 3000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light",
-            });
-          } else {
-            toast.error("Something went wrong!! Try again!!", {
-              position: "top-right",
-              autoClose: 3000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light",
-            });
-          }
-        });
-      dispatch(addTransaction(formValues));
-      setFormValues(initialValues);
-    }
-  };
-
-  const validate = (values) => {
-    const errors = {};
-    const numRegex = /^[0-9]*$/i;
-    if (!values.transactionName) {
-      errors.transactionName = "Name of Transaction is required!";
-    }
-    if (!values.transactionAmount) {
-      errors.transactionAmount = "Estimated Expenses Amount is required!";
-    } else if (!numRegex.test(values.transactionAmount)) {
-      errors.transactionAmount = "Expense sholudn't contains alaphabets.";
-    }
-    return errors;
+    axios
+      .post("/expense/add", {
+        tripId: selectedTripId.tripIdSelected,
+        transactionName: formValues.transactionName,
+        transactionAmount: formValues.transactionAmount,
+      })
+      .then((response) => {
+        if (response.data.success) {
+          props.setTrigger(false);
+          dispatch(expenseAdded(response.data.expense._id));
+          setWantToPay(true);
+          setCurrentExpenseId(response.data.expense._id);
+          setFormValues(initialValues);
+          toast.success("Expense added successfully!!", {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        } else {
+          toast.error("Something went wrong!! Try again!!", {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
+      });
+    dispatch(addTransaction(formValues));
+    setFormValues(initialValues);
   };
 
   useEffect(() => {
@@ -138,48 +110,41 @@ const AddExpensePopUp = (props) => {
 
   const handleTransactionSave = (e) => {
     e.preventDefault();
-    setFormErrors(validate(formValues));
-    console.log("-----");
-    setErrorCheck(true);
-    if (Object.keys(formErrors).length === 0) {
-      console.log(Object.keys(formErrors).length);
-      props.setTrigger(false);
-      axios
-        .post("/expense/add", {
-          tripId: selectedTripId.tripIdSelected,
-          transactionName: formValues.transactionName,
-          transactionAmount: formValues.transactionAmount,
-        })
-        .then((response) => {
-          if (response.data.success) {
-            dispatch(expenseAdded(response.data.expense._id));
-            setFormValues(initialValues);
-            setFormErrors(initialValues);
-            setErrorCheck(false);
-            toast.success("Expense added successfully!!", {
-              position: "top-right",
-              autoClose: 3000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light",
-            });
-          } else {
-            toast.error("Something went wrong!! Try again!!", {
-              position: "top-right",
-              autoClose: 3000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light",
-            });
-          }
-        });
-    }
+    axios
+      .post("/expense/add", {
+        tripId: selectedTripId.tripIdSelected,
+        transactionName: formValues.transactionName,
+        transactionAmount: formValues.transactionAmount,
+      })
+      .then((response) => {
+        if (response.data.success) {
+          props.setTrigger(false);
+          dispatch(expenseAdded(response.data.expense._id));
+          setFormValues(initialValues);
+          toast.success("Expense added successfully!!", {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        } else {
+          toast.error("Something went wrong!! Try again!!", {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
+      });
+    // }
   };
 
   return props.trigger ? (
@@ -204,7 +169,6 @@ const AddExpensePopUp = (props) => {
             type="text"
             name="transactionName"
             handleChange={handleChange}
-            error={formErrors.transactionName}
           />
           <InputField
             label="Expense Amount"
@@ -212,7 +176,6 @@ const AddExpensePopUp = (props) => {
             type="text"
             name="transactionAmount"
             handleChange={handleChange}
-            error={formErrors.transactionAmount}
           />
         </div>
         <div className="popup-save-and-pay-button">

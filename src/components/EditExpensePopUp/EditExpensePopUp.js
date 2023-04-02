@@ -17,74 +17,45 @@ const EditExpensePopUp = (props) => {
     transactionAmount: "",
   };
   const [formValues, setFormValues] = useState(initialValues);
-  const [formErrors, setFormErrors] = useState({});
-  const [errorCheck, setErrorCheck] = useState(false);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
   };
 
-  useEffect(() => {
-    if (errorCheck) {
-      setFormErrors(validate(formValues));
-    }
-  }, [errorCheck, formValues]);
-
   const handleTransactionSave = () => {
-    setFormErrors(validate(formValues));
-    setErrorCheck(true);
-    if (Object.keys(formErrors).length === 0) {
-      props.setTrigger(false);
-      axios
-        .patch(`/expense/update/${props.transactionId}`, {
-          transactionName: formValues.transactionName,
-          transactionAmount: formValues.transactionAmount,
-        })
-        .then((response) => {
-          if (response.data.success) {
-            dispatch(expenseAdded(response.data.updatedExpense._id));
-            setFormErrors(initialValues);
-            setErrorCheck(false);
-            toast.success("Expense Edited successfully!!", {
-              position: "top-right",
-              autoClose: 3000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light",
-            });
-          } else {
-            toast.error("Something went wrong!! Try again!!", {
-              position: "top-right",
-              autoClose: 3000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light",
-            });
-          }
-        });
-    }
+    axios
+      .patch(`/expense/update/${props.transactionId}`, {
+        transactionName: formValues.transactionName,
+        transactionAmount: formValues.transactionAmount,
+      })
+      .then((response) => {
+        if (response.data.success) {
+          props.setTrigger(false);
+          dispatch(expenseAdded(response.data.updatedExpense._id));
+          toast.success("Expense Edited successfully!!", {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        } else {
+          toast.error("Something went wrong!! Try again!!", {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
+      });
   };
-  const validate = (values) => {
-    console.log(values);
-    const errors = {};
-    const numRegex = /^[0-9]*$/i;
-    if (!values.transactionName) {
-      errors.transactionName = "Name of Transaction is required!";
-    }
-    if (!values.transactionAmount) {
-      errors.transactionAmount = "Estimated Expenses Amount is required!";
-    } else if (!numRegex.test(values.transactionAmount)) {
-      errors.transactionAmount = "Expense sholudn't contains alaphabets.";
-    }
-    return errors;
-  };
-
   useEffect(() => {
     try {
       axios.get(`/expense/get/${props.transactionId}`).then((response) => {
@@ -143,7 +114,6 @@ const EditExpensePopUp = (props) => {
             name="transactionName"
             value={formValues.transactionName}
             handleChange={handleChange}
-            error={formErrors.transactionName}
           />
           <InputField
             label="Expense Amount"
@@ -152,7 +122,6 @@ const EditExpensePopUp = (props) => {
             name="transactionAmount"
             value={formValues.transactionAmount}
             handleChange={handleChange}
-            error={formErrors.transactionAmount}
           />
         </div>
         <div className="popup-save-button">
