@@ -1,6 +1,5 @@
 //Author: Jay Ramani(jy948858@dal.ca) || Banner Id : B00911903
 
-
 import React, { useState, useEffect } from 'react';
 import { MdEditNote } from 'react-icons/md';
 import { MdDeleteOutline } from 'react-icons/md';
@@ -14,6 +13,7 @@ import PlanPopup from '../../../components/PopUp/PlanPopup';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
+import {MdOutlineEmail} from "react-icons/md"
 
 const AllPlan = (props) => {
 	const [plans, setPlans] = useState([]);
@@ -22,7 +22,6 @@ const AllPlan = (props) => {
 	const [popupPlanVisible, setPopupPlanVisible] = useState(false);
 	const [showAll, setShowAll] = useState(false);
 	const updateStatus = useSelector((state) => state.updatePlan.updateStatus);
-	
 
 	const items = Array.from(
 		Array(
@@ -32,7 +31,7 @@ const AllPlan = (props) => {
 	const [displayCount, setDisplayCount] = useState(2);
 
 	const handleShowAll = () => {
-		setDisplayCount(displayCount + 1);
+		setDisplayCount(displayCount + 2);
 	};
 
 	const handleShowLess = () => {
@@ -51,6 +50,58 @@ const AllPlan = (props) => {
 
 	function toggleShowAll() {
 		setShowAll(!showAll);
+	}
+
+	const sendEmail = async (email,name) => {
+
+		let message = "Confirm sending an email to join "+name+"'s plan?";
+        if(window.confirm(message)===true){
+
+		await axios({
+			method:'post',
+			url:'https://trip-ease-server.onrender.com/plan/mail/sendmail',
+			data:{
+				to:email,
+			},
+			headers: { 'Content-Type': 'application/json' },
+
+		}).then((res)=>{
+			if(res.data.success){
+			toast.success("Email sent successfully!!", {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
+			}
+		})	
+		// const response = await axios.get(
+		// 	'http://localhost:5001/plan/mail/sendmail',
+		// 	{
+		// 	data:{
+		// 		to:email,	
+		// 	},
+			
+		// 	}
+		// );
+		// if(response.data.success){
+		// 	toast.success("Email sent successfully!!", {
+        //       position: "top-right",
+        //       autoClose: 3000,
+        //       hideProgressBar: false,
+        //       closeOnClick: true,
+        //       pauseOnHover: true,
+        //       draggable: true,
+        //       progress: undefined,
+        //       theme: "light",
+        //     });
+		// }
+		// console.log(response);
+		}			
 	}
 
 	function deleteFunction(data) {
@@ -181,12 +232,12 @@ const AllPlan = (props) => {
 								<Button
 									// className="show-all-less-button"
 									variant="grey"
-									name="Show All"
+									name="Load more"
 									onClick={handleShowAll}
 								/>
 							</div>
 						)}
-						{displayCount === items.length && (
+						{displayCount >= items.length && (
 							<div className="show-all-less">
 								<Button
 									// className="show-all-less-button"
@@ -201,7 +252,7 @@ const AllPlan = (props) => {
 
 				<div className="right-container">
 					<div className="all-plan-title">
-						<span>All Plans</span>
+						<span>Travel Plans</span>
 					</div>
 					<div className="plans">
 						{plans
@@ -232,7 +283,7 @@ const AllPlan = (props) => {
 										/>
 
 										<div className="message">
-											<TbMessageCircle />
+											<MdOutlineEmail onClick={()=>{sendEmail(plan.email,plan.firstName)}}/>
 										</div>
 									</div>
 								</div>
