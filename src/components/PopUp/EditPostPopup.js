@@ -152,6 +152,7 @@ function EditPostPopup(props) {
 						style={{
 							height: '30vh',
 						}}
+						label="Description"
 						row={6}
 						id="description"
 						name="description"
@@ -160,7 +161,7 @@ function EditPostPopup(props) {
 						handleChange={handleChangeDescription}
 					/>
 				</div>
-				<div className="popup-save-button">
+				<div className="popup_save_button_for_post">
 					<Button
 						variant="blue"
 						name="Update"

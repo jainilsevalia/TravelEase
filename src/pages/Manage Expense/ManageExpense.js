@@ -120,7 +120,7 @@ const ManageExpense = (props) => {
     } catch (err) {
       console.log(err);
     }
-  }, [tripEditedState]);
+  }, [tripEditedState, expenseAddedState]);
   useEffect(() => {
     try {
       props.setProgress(10);

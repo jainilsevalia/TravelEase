@@ -100,7 +100,7 @@
 	flex-direction: column;
 	justify-content: center;
 }
-.popup-save-button {
+.popup_save_button_for_post {
 	margin-top: 24px;
 	display: flex;
 	justify-content: center;
