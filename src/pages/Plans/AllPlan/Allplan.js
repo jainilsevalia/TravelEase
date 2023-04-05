@@ -78,29 +78,7 @@ const AllPlan = (props) => {
               theme: "light",
             });
 			}
-		})	
-		// const response = await axios.get(
-		// 	'http://localhost:5001/plan/mail/sendmail',
-		// 	{
-		// 	data:{
-		// 		to:email,	
-		// 	},
-			
-		// 	}
-		// );
-		// if(response.data.success){
-		// 	toast.success("Email sent successfully!!", {
-        //       position: "top-right",
-        //       autoClose: 3000,
-        //       hideProgressBar: false,
-        //       closeOnClick: true,
-        //       pauseOnHover: true,
-        //       draggable: true,
-        //       progress: undefined,
-        //       theme: "light",
-        //     });
-		// }
-		// console.log(response);
+		})		
 		}			
 	}
 
@@ -215,7 +193,7 @@ const AllPlan = (props) => {
 														? plan.travelDescription
 														: `${plan.travelDescription.slice(0, 130)}....`}
 													<button
-														className="show_more_btn_in_description"
+														className="show_more_btn_in_description_all_plan"
 														onClick={toggleShowAll}
 													>
 														{showAll ? 'show less' : 'show more'}
