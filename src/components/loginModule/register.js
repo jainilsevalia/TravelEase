@@ -1,8 +1,11 @@
+//Author: Maitri Savla(mt588638@dal.ca) || Banner Id : B00899569
+
 import { useState, useEffect } from 'react';
 import './Style.css';
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Path from '../../constants/Path';
+import Axios from 'axios';
 
 function RegistrationForm() {
 	const initialValues = {
@@ -36,7 +39,15 @@ function RegistrationForm() {
 			console.log('Successful registration');
 			nav(Path.PROFILE_PAGE);
 		}
+
+		Axios.post('https://trip-ease-server.onrender.com/register', {
+        firstname:formValues.fname,
+        lastname:formValues.lname,
+        emailid:formValues.email,
+        pass:formValues.password
+    })
 	}, [formErrors, isSubmit, nav]);
+
 
 	const validate = (values) => {
 		const errors = {};
