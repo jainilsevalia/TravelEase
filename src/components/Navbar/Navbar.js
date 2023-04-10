@@ -147,7 +147,7 @@ function NavbarFun() {
 											to={Path.CREATE_LIVE_UPDATES}
 											onClick={handleOpen}
 										>
-											Update
+											Story
 										</Link>
 									</li>
 									<li className="menu-item">
@@ -165,7 +165,7 @@ function NavbarFun() {
 						<Link to={Path.PROFILE_PAGE}>
 							<button className="profile-pic-navbar">
 								<img
-									src="./profile.jpg"
+									src="/Images/profilePic.jpg"
 									alt=" "
 								/>
 							</button>

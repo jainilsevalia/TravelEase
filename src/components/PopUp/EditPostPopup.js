@@ -38,7 +38,8 @@ function EditPostPopup(props) {
 			});
 		} else if (!locationRegex.test(value)) {
 			setErrorMessage({
-				locationError: 'Location sould not contain numbers!!',
+				locationError:
+					'Location sould not contain numbers or special characters!!',
 			});
 		} else {
 			setErrorMessage({
