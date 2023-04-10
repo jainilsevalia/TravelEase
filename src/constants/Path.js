@@ -15,6 +15,8 @@ const Path = {
   ALL_PLAN: "/plan",
   MY_PLAN: "/myplan",
   CANCEL_PAY: "/cancel-Pay/:id",
+  EMAIL_UPDATE: "/emailUpdate",
+  PASSWORD_UPDATE: "/passwordUpdate"
 };
 
 export default Path;

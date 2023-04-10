@@ -20,6 +20,8 @@ import Login from "./components/loginModule/login";
 import RegistrationForm from "./components/loginModule/register";
 import Forgotpass from "./components/loginModule/forgotpass";
 import LoadingBar from "react-top-loading-bar";
+import ChangeEmailPage from "./components/Settings/UpdateEmailAddress";
+import ChangePassword from "./components/Settings/ChangePassword";
 
 function App() {
   const [progress, setProgress] = useState(0);
@@ -53,6 +55,8 @@ function App() {
         />
         <Route path={Path.CREATE_PLAN} element={<Plan />} />
         <Route path={Path.PROFILE_PAGE} element={<Profile />} />
+        <Route path={Path.EMAIL_UPDATE} element={<ChangeEmailPage/>}/>
+        <Route path={Path.PASSWORD_UPDATE} element={<ChangePassword/>}/>
         <Route path={Path.ALL_PLAN} element={<AllPlan setProgress={setProgress}/>} />
         <Route path={Path.MY_PLAN} element={<MyPlan />} />
         <Route path={Path.CANCEL_PAY} element={<CancelPay />} />
