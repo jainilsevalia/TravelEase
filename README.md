@@ -1,21 +1,9 @@
-# **CSCI-5709 (Advance Topics in Web Development)**
+# **TripEase**
 
-# **Group 12**
 * *Date Created*: 31 MAR 2023
 * *Last Modification Date*: 31 MAR 2023
 * *Deployed link of Netlify*: https://tripeasego.netlify.app/
 * *Render deployment Link*: https://trip-ease-server.onrender.com/
-* *Git URL*: https://git.cs.dal.ca/sevalia/csci-5709_grp-12
-
-
-# **Authors:**
-
--   Jay Ramani - ( B00911903 )
--   Jainil Sevalia - ( B00925445 )
--   Shani Kachhadiya - ( B00917757 )
--   Maitri Savla - ( B00899569 )
--   Dhrupa Patel - ( B00912610 )
-
 
 # **Prerequisites to run the application**
 
@@ -51,13 +39,13 @@ After Installing Git,
 The first step is to clone the Group project repo in your machine using the below command. Run the below command at the destination in cmd where you want to clone the repository.
 
 ```
-git clone https://git.cs.dal.ca/sevalia/csci-5709_grp-12.git
+git clone https://github.com/jainilsevalia/TripEase.git
 ```
 
 Next, Change the directory to the client side of the project using:
 
 ```
-cd .\csci-5709_grp-12\client
+cd .\TripEase\client
 ```
 
 Next step is, run the below command to instal all the packages and dependencies that is required to run the Assignment.
@@ -77,7 +65,7 @@ Now, To run the server side of the Assignment, open the cmd with the path of the
 Next, Change the directory to the server side of the project using:
 
 ```
-cd .\csci-5709_grp-12\server
+cd .\TripEase\server
 ```
 
 Next step is, run the below command to instal all the packages and dependencies that is required to run the Assignment.
